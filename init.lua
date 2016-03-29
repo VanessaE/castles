@@ -15,7 +15,7 @@ minetest.register_node("castle:stonewall", {
 	paramtype = light,
 	drop = "castle:stonewall",
 	groups = {cracky=3},
-	
+
 })
 
 minetest.register_node("castle:rubble", {
@@ -54,11 +54,11 @@ minetest.register_node("castle:stonewall_corner", {
 	paramtype = light,
 	paramtype2 = "facedir",
 	description = "Castle Corner",
-	tiles = {"castle_stonewall.png", 
+	tiles = {"castle_stonewall.png",
 	                  "castle_stonewall.png",
-			"castle_corner_stonewall1.png", 
-			"castle_stonewall.png", 
-			"castle_stonewall.png", 
+			"castle_corner_stonewall1.png",
+			"castle_stonewall.png",
+			"castle_stonewall.png",
 			"castle_corner_stonewall2.png"},
 	groups = {cracky=3},
 })
@@ -121,13 +121,13 @@ minetest.register_craft( {
          }
 } )
 
-local mod_building_blocks = minetest.get_modpath("building_blocks") 
+local mod_building_blocks = minetest.get_modpath("building_blocks")
 local mod_streets = minetest.get_modpath("streets") or minetest.get_modpath("asphalt")
 
 if mod_building_blocks then
 	minetest.register_craft( {
          output = "castle:roofslate 4",
-         recipe = { 
+         recipe = {
 			{ "building_blocks:Tar" , "default:gravel" },
 			{ "default:gravel",       "building_blocks:Tar" }
 		}
@@ -135,7 +135,7 @@ if mod_building_blocks then
 
 	minetest.register_craft( {
          output = "castle:roofslate 4",
-         recipe = { 
+         recipe = {
 			{ "default:gravel",       "building_blocks:Tar" },
 			{ "building_blocks:Tar" , "default:gravel" }
 		}
@@ -145,7 +145,7 @@ end
 if mod_streets then
 		minetest.register_craft( {
          output = "castle:roofslate 4",
-         recipe = { 
+         recipe = {
 			{ "streets:asphalt" , "default:gravel" },
 			{ "default:gravel",   "streets:asphalt" }
 		}
@@ -153,7 +153,7 @@ if mod_streets then
 
 	minetest.register_craft( {
          output = "castle:roofslate 4",
-         recipe = { 
+         recipe = {
 			{ "default:gravel",   "streets:asphalt" },
 			{ "streets:asphalt" , "default:gravel" }
 		}
@@ -201,40 +201,34 @@ minetest.register_craft({
 	}
 })
 
-doors.register_door("castle:oak_door", {
-	description = "Oak Door",
-	inventory_image = "castle_oak_door_inv.png",
-	groups = {choppy=2,door=1},
-	tiles_bottom = {"castle_oak_door_bottom.png", "door_oak.png"},
-	tiles_top = {"castle_oak_door_top.png", "door_oak.png"},
-	only_placer_can_open = true,
+doors.register("castle:oak_door", {
+		tiles = {{ name = "castle_door_oak.png", backface_culling = true }},
+		description = "Oak Door",
+		inventory_image = "castle_oak_door_inv.png",
+		protected = true,
+		groups = { choppy = 2, door = 1 },
+		sounds = default.node_sound_wood_defaults(),
+		recipe = {
+			{"default:tree", "default:tree"},
+			{"default:tree", "default:tree"},
+			{"default:tree", "default:tree"},
+		}
 })
 
-doors.register_door("castle:jail_door", {
-	description = "Jail Door",
-	inventory_image = "castle_jail_door_inv.png",
-	groups = {cracky=2,door=1},
-	tiles_bottom = {"castle_jail_door_bottom.png", "door_jail.png"},
-	tiles_top = {"castle_jail_door_top.png", "door_jail.png"},
-	only_placer_can_open = true,
-})
-
-minetest.register_craft({
-	output = "castle:oak_door",
-	recipe = {
-		{"default:tree", "default:tree"},
-		{"default:tree", "default:tree"},
-		{"default:tree", "default:tree"}
-	}
-})
-
-minetest.register_craft({
-	output = "castle:jail_door",
-	recipe = {
-		{"castle:jailbars", "castle:jailbars"},
-		{"castle:jailbars", "castle:jailbars"},
-		{"castle:jailbars", "castle:jailbars"}
-	}
+doors.register("castle:jail_door", {
+		tiles = {{ name = "castle_door_jail.png", backface_culling = true }},
+		description = "Jail Door",
+		inventory_image = "castle_jail_door_inv.png",
+		protected = true,
+		groups = { cracky = 2, door = 1},
+		--sounds = default.node_sound_metal_defaults(),
+		sound_open = "doors_steel_door_open",
+		sound_close = "doors_steel_door_close",
+		recipe = {
+			{"castle:jailbars", "castle:jailbars"},
+			{"castle:jailbars", "castle:jailbars"},
+			{"castle:jailbars", "castle:jailbars"},
+		}
 })
 
 function default.get_ironbound_chest_formspec(pos)
@@ -269,9 +263,9 @@ minetest.register_node("castle:ironbound_chest",{
 		type = "fixed",
 		fixed = {
 			{-0.500000,-0.500000,-0.312500,0.500000,-0.062500,0.312500},
-			{-0.500000,-0.062500,-0.250000,0.500000,0.000000,0.250000}, 
+			{-0.500000,-0.062500,-0.250000,0.500000,0.000000,0.250000},
 			{-0.500000,0.000000,-0.187500,0.500000,0.062500,0.187500},
-			{-0.500000,0.062500,-0.062500,0.500000,0.125000,0.062500}, 
+			{-0.500000,0.062500,-0.062500,0.500000,0.125000,0.062500},
 		},
 	},
 	selection_box = {
@@ -279,7 +273,7 @@ minetest.register_node("castle:ironbound_chest",{
 		fixed = {
 			{-0.5,-0.500000,-0.400000,0.5,0.200000,0.4},
 
-		},		
+		},
 	},
 	sounds = default.node_sound_wood_defaults(),
 	after_place_node = function(pos, placer)
@@ -388,7 +382,7 @@ minetest.register_craft({
 })
 
 if minetest.get_modpath("moreblocks") then
-	
+
 	stairsplus:register_all("castle", "dungeon_stone", "castle:dungeon_stone", {
 		description = "Dungeon Stone",
 		tiles = {"castle_dungeon_stone.png"},
