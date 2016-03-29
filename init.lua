@@ -231,15 +231,6 @@ doors.register("castle:jail_door", {
 		}
 })
 
-minetest.register_craft({
-	output = "castle:oak_door",
-	recipe = {
-		{"default:tree", "default:tree"},
-		{"default:tree", "default:tree"},
-		{"default:tree", "default:tree"}
-	}
-})
-
 function default.get_ironbound_chest_formspec(pos)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
 	local formspec =
@@ -260,7 +251,7 @@ minetest.register_node("castle:ironbound_chest",{
 	drawtype = "nodebox",
 	description = "Ironbound Chest",
 	tiles = {"castle_ironbound_chest_top.png",
-   "castle_ironbound_chest_top.png",
+	                  "castle_ironbound_chest_top.png",
 			"castle_ironbound_chest_side.png",
 			"castle_ironbound_chest_side.png",
 			"castle_ironbound_chest_back.png",
