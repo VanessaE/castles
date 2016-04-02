@@ -5,6 +5,7 @@ minetest.register_alias("darkage:straw",       "farming:straw")
 minetest.register_alias("cottages:straw_bale", "castle:bound_straw")
 minetest.register_alias("darkage:straw_bale",  "castle:bound_straw")
 minetest.register_alias("darkage:lamp",        "castle:street_light")
+minetest.register_alias("castle:pavement",      "castle:pavement_brick")
 
 minetest.register_node("castle:anvil",{
 	drawtype = "nodebox",
@@ -17,10 +18,10 @@ minetest.register_node("castle:anvil",{
 		type = "fixed",
 		fixed = {
 			{-0.500000,-0.500000,-0.500000,0.500000,-0.250000,0.500000},
-			{-0.187500,-0.500000,-0.375000,0.187500,0.312500,0.375000}, 
-			{-0.375000,-0.500000,-0.437500,0.375000,-0.125000,0.437500}, 
-			{-0.500000,0.312500,-0.500000,0.500000,0.500000,0.500000}, 
-			{-0.375000,0.187500,-0.437500,0.375000,0.425000,0.437500}, 
+			{-0.187500,-0.500000,-0.375000,0.187500,0.312500,0.375000},
+			{-0.375000,-0.500000,-0.437500,0.375000,-0.125000,0.437500},
+			{-0.500000,0.312500,-0.500000,0.500000,0.500000,0.500000},
+			{-0.375000,0.187500,-0.437500,0.375000,0.425000,0.437500},
 		},
 	},
 })
@@ -267,7 +268,7 @@ stairs.register_stair_and_slab("straw", "farming:straw",
 	default.node_sound_leaves_defaults()
 )
 
-minetest.register_node("castle:pavement", {
+minetest.register_node("castle:pavement_brick", {
 	description = "Paving Stone",
 	drawtype = "normal",
 	tiles = {"castle_pavement_brick.png"},
@@ -276,7 +277,7 @@ minetest.register_node("castle:pavement", {
 })
 
 minetest.register_craft({
-	output = "castle:pavement 4",
+	output = "castle:pavement_brick 4",
 	recipe = {
 		{"default:stone", "default:cobble"},
 		{"default:cobble", "default:stone"},
