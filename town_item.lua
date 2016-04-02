@@ -260,14 +260,6 @@ minetest.register_craft({
 	}
 })
 
-stairs.register_stair_and_slab("straw", "farming:straw",
-	{choppy=3, flammable=1, oddly_breakable_by_hand=3},
-	{"farming_straw.png"},
-	"Castle Straw Stair",
-	"Castle Straw Slab",
-	default.node_sound_leaves_defaults()
-)
-
 minetest.register_node("castle:pavement_brick", {
 	description = "Paving Stone",
 	drawtype = "normal",
