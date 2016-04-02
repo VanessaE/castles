@@ -102,16 +102,6 @@ minetest.register_node("castle:hides", {
 	},
 })
 
-
-minetest.register_craft({
-	output = "castle:hides",
-	recipe = {
-		{"wool:white"},
-		{"bucket:bucket_water"},
-	}
-})
-
-
 minetest.register_craft( {
          type = "shapeless",
          output = "castle:hides 6",
@@ -234,6 +224,9 @@ function default.get_ironbound_chest_formspec(pos)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
 	local formspec =
 		"size[8,9]"..
+		default.gui_bg ..
+  default.gui_bg_img ..
+  default.gui_slots ..
 		"list[nodemeta:".. spos .. ";main;0,0;8,4;]"..
 		"list[current_player;main;0,5;8,4;]"
 	return formspec

@@ -17,10 +17,10 @@ minetest.register_node("castle:anvil",{
 		type = "fixed",
 		fixed = {
 			{-0.500000,-0.500000,-0.500000,0.500000,-0.250000,0.500000},
-			{-0.187500,-0.500000,-0.375000,0.187500,0.312500,0.375000}, 
-			{-0.375000,-0.500000,-0.437500,0.375000,-0.125000,0.437500}, 
-			{-0.500000,0.312500,-0.500000,0.500000,0.500000,0.500000}, 
-			{-0.375000,0.187500,-0.437500,0.375000,0.425000,0.437500}, 
+			{-0.187500,-0.500000,-0.375000,0.187500,0.312500,0.375000},
+			{-0.375000,-0.500000,-0.437500,0.375000,-0.125000,0.437500},
+			{-0.500000,0.312500,-0.500000,0.500000,0.500000,0.500000},
+			{-0.375000,0.187500,-0.437500,0.375000,0.425000,0.437500},
 		},
 	},
 })
@@ -43,7 +43,11 @@ minetest.register_node("castle:workbench",{
 	drawtype = "normal",
     on_construct = function ( pos )
         local meta = minetest.get_meta( pos )
-		meta:set_string( 'formspec', 'size[10,10;]' ..
+		meta:set_string( 'formspec',
+   'size[10,10;]' ..
+   default.gui_bg ..
+   default.gui_bg_img ..
+   default.gui_slots ..
 			'label[1,0;Source Material]' ..
 			'list[context;src;1,1;2,4;]' ..
 			'label[4,0;Recipe to Use]' ..
@@ -204,6 +208,9 @@ minetest.register_node("castle:crate", {
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec",
 				"size[8,9]"..
+		  default.gui_bg ..
+    default.gui_bg_img ..
+    default.gui_slots ..
 				"list[current_name;main;0,1;8,4;]"..
 				"list[current_player;main;0,5;8,4;]")
 		meta:set_string("infotext", "Crate")
