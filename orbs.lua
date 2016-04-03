@@ -19,19 +19,19 @@ minetest.register_craftitem("castle:orb_night", {
 })
 
 minetest.register_craft( {
-         output = "castle:orb_day",
-         recipe = { 
-         {"", "default:glass",""},
-         {"default:glass", "default:mese_crystal","default:glass"},
-         {"", "default:glass",""}
-         },
+  output = "castle:orb_day",
+  recipe = {
+    {"default:diamond", "default:diamond","default:diamond"},
+    {"default:diamond", "default:mese","default:diamond"},
+    {"default:diamond", "default:diamond","default:diamond"}
+   },
 })
 
 minetest.register_craft({
-	output = "castle:orb_night",
-	recipe = {
-		{"", "default:glass",""},
-		{"default:glass", "default:obsidian","default:glass"},
-                  {"", "default:glass",""}
-	}
+  output = "castle:orb_night",
+  recipe = {
+    {"default:diamond", "default:diamond","default:diamond"},
+    {"default:diamond", "default:obsidian","default:diamond"},
+    {"default:diamond", "default:diamond","default:diamond"}
+   }
 })

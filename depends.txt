@@ -1,8 +1,9 @@
 default
-stairs
 doors
 farming
-building_blocks?
+stairs
 asphalt?
-streets?
+building_blocks?
 moreblocks?
+streets?
+xpanes?
