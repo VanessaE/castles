@@ -44,10 +44,10 @@ minetest.register_node("castle:workbench",{
     on_construct = function ( pos )
         local meta = minetest.get_meta( pos )
 		meta:set_string( 'formspec',
-   'size[10,10;]' ..
-   default.gui_bg ..
-   default.gui_bg_img ..
-   default.gui_slots ..
+   			'size[10,10;]' ..
+			 default.gui_bg ..
+			 default.gui_bg_img ..
+			 default.gui_slots ..
 			'label[1,0;Source Material]' ..
 			'list[context;src;1,1;2,4;]' ..
 			'label[4,0;Recipe to Use]' ..
@@ -208,9 +208,9 @@ minetest.register_node("castle:crate", {
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec",
 				"size[8,9]"..
-		  default.gui_bg ..
-    default.gui_bg_img ..
-    default.gui_slots ..
+				 default.gui_bg ..
+				 default.gui_bg_img ..
+				 default.gui_slots ..
 				"list[current_name;main;0,1;8,4;]"..
 				"list[current_player;main;0,5;8,4;]")
 		meta:set_string("infotext", "Crate")
