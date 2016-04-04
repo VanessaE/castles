@@ -17,10 +17,10 @@ minetest.register_node("castle:anvil",{
 		type = "fixed",
 		fixed = {
 			{-0.500000,-0.500000,-0.500000,0.500000,-0.250000,0.500000},
-			{-0.187500,-0.500000,-0.375000,0.187500,0.312500,0.375000}, 
-			{-0.375000,-0.500000,-0.437500,0.375000,-0.125000,0.437500}, 
-			{-0.500000,0.312500,-0.500000,0.500000,0.500000,0.500000}, 
-			{-0.375000,0.187500,-0.437500,0.375000,0.425000,0.437500}, 
+			{-0.187500,-0.500000,-0.375000,0.187500,0.312500,0.375000},
+			{-0.375000,-0.500000,-0.437500,0.375000,-0.125000,0.437500},
+			{-0.500000,0.312500,-0.500000,0.500000,0.500000,0.500000},
+			{-0.375000,0.187500,-0.437500,0.375000,0.425000,0.437500},
 		},
 	},
 })
@@ -36,7 +36,7 @@ minetest.register_craft({
 
 minetest.register_node("castle:workbench",{
 	description = "Workbench",
-	tiles = {"castle_workbench_top.png", "default_wood.png", "castle_workbench_1.png", "castle_workbench_1.png", "castle_workbench_2.png", "castle_workbench_2.png"},
+	tiles = {"castle_workbench_top.png", "castle_workbench_bottom.png", "castle_workbench_1.png", "castle_workbench_1.png", "castle_workbench_2.png", "castle_workbench_2.png"},
 	paramtype2 = "facedir",
 	paramtype = "light",
 	groups = {choppy=2,oddly_breakable_by_hand=2,flammable=2},
