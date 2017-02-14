@@ -51,7 +51,7 @@ end
 if read_setting("castle_structure_desertstone", true) then
 	table.insert(materials, {name="desertstone", desc=S("Desert Stone"), tile="default_desert_stone.png", craft_material="default:desert_stone"})
 end
-if read_setting("castle_structure_wood", true) then
+if read_setting("castle_structure_wood", false) then
 	table.insert(materials, {name="wood", desc=S("Wood"), tile="default_wood.png", craft_material="group:wood", composition_material="default:wood"})
 end
 
