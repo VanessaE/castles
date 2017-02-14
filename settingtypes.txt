@@ -1,0 +1,16 @@
+[Materials]
+
+castle_structure_stonewall (Stonewall) bool true
+castle_structure_cobble (Cobble) bool true
+castle_structure_stonebrick (Stonebrick) bool true
+castle_structure_sandstonebrick (Sandstone Brick) bool true
+castle_structure_desertstonebrick (Desert Stone Brick) bool true
+castle_structure_stone (Stone) bool true
+castle_structure_sandstone (Sandstone) bool true
+castle_structure_desertstone (Desert Stone) bool true
+
+[Forms]
+
+castle_structure_pillar (Pillars) bool true
+castle_structure_arrowslit (Arrow slits) bool true
+castle_structure_murderhole (Murder holes) bool true
