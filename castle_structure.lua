@@ -1,3 +1,4 @@
+
 minetest.register_alias("castle:pillars_bottom", "castle:pillars_stonewall_bottom")
 minetest.register_alias("castle:pillars_top", "castle:pillars_stonewall_top")
 minetest.register_alias("castle:pillars_middle", "castle:pillars_stonewall_middle")
@@ -65,19 +66,31 @@ local get_material_properties = function(material)
 		composition_def = minetest.registered_nodes[material.craft_material]
 		burn_time = minetest.get_craft_result({method="fuel", width=1, items={ItemStack(material.craft_materia)}}).time
 	end
-	return composition_def, burn_time
+	local tiles = material.tile
+	if tiles == nil then
+		tiles = composition_def.tile
+	elseif type(tiles) == "string" then
+		tiles = {tiles}
+	end
+
+	local desc = material.desc
+	if desc == nil then
+		desc = composition_def.description
+	end
+	
+	return composition_def, burn_time, tiles, desc
 end
 
 -------------------------------------------------------------------------------------
 
 castle_structure.register_murderhole = function(material)
-	local composition_def, burn_time = get_material_properties(material)
+	local composition_def, burn_time, tile, desc = get_material_properties(material)
 	
 	-- Node Definition
 	minetest.register_node("castle:hole_"..material.name, {
 		drawtype = "nodebox",
-		description = S("@1 Murder Hole", material.desc),
-		tiles = {material.tile},
+		description = S("@1 Murder Hole", desc),
+		tiles = tile,
 		groups = composition_def.groups,
 		sounds = composition_def.sounds,
 		paramtype = "light",
@@ -113,61 +126,115 @@ end
 -------------------------------------------------------------------------------------
 
 castle_structure.register_pillar = function(material)
-	local composition_def, burn_time = get_material_properties(material)
+	local composition_def, burn_time, tile, desc = get_material_properties(material)
+	local group = composition_def.groups
+	group.pillar=1
 		
 	-- Node Definition
 	minetest.register_node("castle:pillars_"..material.name.."_bottom", {
 		drawtype = "nodebox",
-		description = S("@1 Pillar Base", material.desc),
-		tiles = {material.tile},
-		groups = composition_def.groups,
+		description = S("@1 Pillar Base", desc),
+		tiles = tile,
+		groups = group,
 		sounds = composition_def.sounds,
 		paramtype = "light",
 		paramtype2 = "facedir",
 		node_box = {
 			type = "fixed",
 			fixed = {
-				{-0.500000,-0.500000,-0.500000,0.500000,-0.375000,0.500000},
-				{-0.375000,-0.375000,-0.375000,0.375000,-0.125000,0.375000},
-				{-0.250000,-0.125000,-0.250000,0.250000,0.500000,0.250000}, 
+				{-0.5,-0.5,-0.5,0.5,-0.375,0.5},
+				{-0.375,-0.375,-0.375,0.375,-0.125,0.375},
+				{-0.25,-0.125,-0.25,0.25,0.5,0.25}, 
+			},
+		},
+	})
+
+	minetest.register_node("castle:pillars_"..material.name.."_bottom_half", {
+		drawtype = "nodebox",
+		description = S("@1 Half Pillar Base", desc),
+		tiles = tile,
+		groups = group,
+		sounds = composition_def.sounds,
+		paramtype = "light",
+		paramtype2 = "facedir",
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{-0.5, -0.5, 0, 0.5, -0.375, 0.5},
+				{-0.375, -0.375, 0.125, 0.375, -0.125, 0.5},
+				{-0.25, -0.125, 0.25, 0.25, 0.5, 0.5},
 			},
 		},
 	})
 	
 	minetest.register_node("castle:pillars_"..material.name.."_top", {
 		drawtype = "nodebox",
-		description = S("@1 Pillar Top", material.desc),
-		tiles = {material.tile},
-		groups = composition_def.groups,
-		sounds = composition_def.sounds,
-		paramtype = "light",
-		paramtype2 = "facedir",
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.500000,0.312500,-0.500000,0.500000,0.500000,0.500000}, 
-			{-0.375000,0.062500,-0.375000,0.375000,0.312500,0.375000}, 
-			{-0.250000,-0.500000,-0.250000,0.250000,0.062500,0.250000},
-		},
-	},
-	})
-
-	minetest.register_node("castle:pillars_"..material.name.."_middle", {
-		drawtype = "nodebox",
-		description = S("@1 Pillar Middle", material.desc),
-		tiles = {material.tile},
-		groups = composition_def.groups,
+		description = S("@1 Pillar Top", desc),
+		tiles = tile,
+		groups = group,
 		sounds = composition_def.sounds,
 		paramtype = "light",
 		paramtype2 = "facedir",
 		node_box = {
 			type = "fixed",
 			fixed = {
-				{-0.250000,-0.500000,-0.250000,0.250000,0.500000,0.250000},
+				{-0.5,0.3125,-0.5,0.5,0.5,0.5}, 
+				{-0.375,0.0625,-0.375,0.375,0.3125,0.375}, 
+				{-0.25,-0.5,-0.25,0.25,0.0625,0.25},
 			},
 		},
 	})
 
+	minetest.register_node("castle:pillars_"..material.name.."_top_half", {
+		drawtype = "nodebox",
+		description = S("@1 Half Pillar Top", desc),
+		tiles = tile,
+		groups = group,
+		sounds = composition_def.sounds,
+		paramtype = "light",
+		paramtype2 = "facedir",
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{-0.5, 0.3125, 0, 0.5, 0.5, 0.5},
+				{-0.375, 0.0625, 0.125, 0.375, 0.3125, 0.5},
+				{-0.25, -0.5, 0.25, 0.25, 0.0625, 0.5},
+			},
+		},
+	})	
+
+	minetest.register_node("castle:pillars_"..material.name.."_middle", {
+		drawtype = "nodebox",
+		description = S("@1 Pillar Middle", desc),
+		tiles = tile,
+		groups = group,
+		sounds = composition_def.sounds,
+		paramtype = "light",
+		paramtype2 = "facedir",
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{-0.25,-0.5,-0.25,0.25,0.5,0.25},
+			},
+		},
+	})
+
+	minetest.register_node("castle:pillars_"..material.name.."_middle_half", {
+		drawtype = "nodebox",
+		description = S("@1 Half Pillar Middle", desc),
+		tiles = tile,
+		groups = group,
+		sounds = composition_def.sounds,
+		paramtype = "light",
+		paramtype2 = "facedir",
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{-0.25, -0.5, 0.25, 0.25, 0.5, 0.5},
+			},
+		},
+	})
+	
 	minetest.register_craft({
 		output = "castle:pillars_"..material.name.."_bottom 4",
 		recipe = {
@@ -192,6 +259,39 @@ castle_structure.register_pillar = function(material)
 			{material.craft_material,material.craft_material} },
 	})
 	
+	minetest.register_craft({
+		output = "castle:pillars_"..material.name.."_middle_half 2",
+		type="shapeless",
+		recipe = {"castle:pillars_"..material.name.."_middle"},
+	})
+	minetest.register_craft({
+		output = "castle:pillars_"..material.name.."_middle",
+		type="shapeless",
+		recipe = {"castle:pillars_"..material.name.."_middle_half", "castle:pillars_"..material.name.."_middle_half"},
+	})
+
+	minetest.register_craft({
+		output = "castle:pillars_"..material.name.."_top_half 2",
+		type="shapeless",
+		recipe = {"castle:pillars_"..material.name.."_top"},
+	})
+	minetest.register_craft({
+		output = "castle:pillars_"..material.name.."_top",
+		type="shapeless",
+		recipe = {"castle:pillars_"..material.name.."_top_half", "castle:pillars_"..material.name.."_top_half"},
+	})
+
+	minetest.register_craft({
+		output = "castle:pillars_"..material.name.."_bottom_half 2",
+		type="shapeless",
+		recipe = {"castle:pillars_"..material.name.."_bottom"},
+	})
+	minetest.register_craft({
+		output = "castle:pillars_"..material.name.."_bottom",
+		type="shapeless",
+		recipe = {"castle:pillars_"..material.name.."_bottom_half", "castle:pillars_"..material.name.."_bottom_half"},
+	})
+	
 	if burn_time > 0 then
 		minetest.register_craft({
 			type = "fuel",
@@ -200,14 +300,29 @@ castle_structure.register_pillar = function(material)
 		})	
 		minetest.register_craft({
 			type = "fuel",
+			recipe = "castle:pillars_"..material.name.."_top_half",
+			burntime = burn_time*5/8,
+		})
+		minetest.register_craft({
+			type = "fuel",
 			recipe = "castle:pillars_"..material.name.."_bottom",
 			burntime = burn_time*5/4,
 		})	
 		minetest.register_craft({
 			type = "fuel",
+			recipe = "castle:pillars_"..material.name.."_bottom_half",
+			burntime = burn_time*5/8,
+		})	
+		minetest.register_craft({
+			type = "fuel",
 			recipe = "castle:pillars_"..material.name.."_middle",
 			burntime = burn_time*6/4,
-		})	
+		})
+		minetest.register_craft({
+			type = "fuel",
+			recipe = "castle:pillars_"..material.name.."_middle_half",
+			burntime = burn_time*6/8,
+		})
 	end
 	
 end
@@ -215,13 +330,13 @@ end
 -------------------------------------------------------------------------------------
 
 castle_structure.register_arrowslit = function(material)
-	local composition_def, burn_time = get_material_properties(material)
+	local composition_def, burn_time, tile, desc = get_material_properties(material)
 
 	-- Node Definition
 	minetest.register_node("castle:arrowslit_"..material.name, {
 		drawtype = "nodebox",
-		description = S("@1 Arrowslit", material.desc),
-		tiles = {material.tile},
+		description = S("@1 Arrowslit", desc),
+		tiles = tile,
 		groups = composition_def.groups,
 		sounds = composition_def.sounds,
 		paramtype = "light",
@@ -229,24 +344,26 @@ castle_structure.register_arrowslit = function(material)
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.500000,-0.375000,-0.500000,-0.062500,0.375000,-0.312500},
-			{0.062500,-0.375000,-0.500000,0.500000,0.375000,-0.312500},
-			{-0.500000,0.375000,-0.500000,0.500000,0.500000,-0.312500}, 
-			{-0.500000,-0.500000,-0.500000,0.500000,-0.375000,-0.312500}, 
+			{-0.5,-0.375,-0.5,-0.0625,0.375,-0.3125},
+			{0.0625,-0.375,-0.5,0.5,0.375,-0.3125},
+			{-0.5,0.375,-0.5,0.5,0.5,-0.3125}, 
+			{-0.5,-0.5,-0.5,0.5,-0.375,-0.3125}, 
+			{0.25, -0.5, -0.3125, 0.5, 0.5, -0.125},
+			{-0.5, -0.5, -0.3125, -0.25, 0.5, -0.125},
 		},
 	},
 	selection_box = {
 		type = "fixed",
 		fixed = {
-			{-0.500000,-0.500000,-0.500000,0.500000,0.500000,-0.312500},
+			{-0.5,-0.5,-0.5,0.5,0.5,-0.125},
 		},
 	},
 	})
 
 	minetest.register_node("castle:arrowslit_"..material.name.."_cross", {
 		drawtype = "nodebox",
-		description = S("@1 Arrowslit with Cross", material.desc),
-		tiles = {material.tile},
+		description = S("@1 Arrowslit with Cross", desc),
+		tiles = tile,
 		groups = composition_def.groups,
 		sounds = composition_def.sounds,
 		paramtype = "light",
@@ -254,28 +371,30 @@ castle_structure.register_arrowslit = function(material)
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.500000,-0.125000,-0.500000,-0.062500,0.375000,-0.312500}, 
-			{0.062500,-0.125000,-0.500000,0.500000,0.375000,-0.312500},
-			{-0.500000,0.375000,-0.500000,0.500000,0.500000,-0.312500}, 
-			{-0.500000,-0.500000,-0.500000,0.500000,-0.375000,-0.312500}, 
-			{0.062500,-0.375000,-0.500000,0.500000,-0.250000,-0.312500}, 
-			{-0.500000,-0.375000,-0.500000,-0.062500,-0.250000,-0.312500},
-			{-0.500000,-0.250000,-0.500000,-0.187500,-0.125000,-0.312500}, 
-			{0.187500,-0.250000,-0.500000,0.500000,-0.125000,-0.312500}, 
+			{-0.5,-0.125,-0.5,-0.0625,0.375,-0.3125}, 
+			{0.0625,-0.125,-0.5,0.5,0.375,-0.3125},
+			{-0.5,0.375,-0.5,0.5,0.5,-0.3125}, 
+			{-0.5,-0.5,-0.5,0.5,-0.375,-0.3125}, 
+			{0.0625,-0.375,-0.5,0.5,-0.25,-0.3125}, 
+			{-0.5,-0.375,-0.5,-0.0625,-0.25,-0.3125},
+			{-0.5,-0.25,-0.5,-0.1875,-0.125,-0.3125}, 
+			{0.1875,-0.25,-0.5,0.5,-0.125,-0.3125}, 
+			{0.25, -0.5, -0.3125, 0.5, 0.5, -0.125},
+			{-0.5, -0.5, -0.3125, -0.25, 0.5, -0.125},
 		},
 	},
 	selection_box = {
 		type = "fixed",
 		fixed = {
-			{-0.500000,-0.500000,-0.500000,0.500000,0.500000,-0.312500},
+			{-0.5,-0.5,-0.5,0.5,0.5,-0.125},
 		},
 	},
 	})
 
 	minetest.register_node("castle:arrowslit_"..material.name.."_hole", {
 		drawtype = "nodebox",
-		description = S("@1 Arrowslit with Hole", material.desc),
-		tiles = {material.tile},
+		description = S("@1 Arrowslit with Hole", desc),
+		tiles = tile,
 		groups = composition_def.groups,
 		sounds = composition_def.sounds,
 		paramtype = "light",
@@ -283,18 +402,20 @@ castle_structure.register_arrowslit = function(material)
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.500000,-0.375000,-0.500000,-0.125000,0.375000,-0.312500},
-			{0.125000,-0.375000,-0.500000,0.500000,0.375000,-0.312500}, 
-			{-0.500000,-0.500000,-0.500000,0.500000,-0.375000,-0.312500}, 
-			{0.062500,-0.125000,-0.500000,0.125000,0.375000,-0.312500},
-			{-0.125000,-0.125000,-0.500000,-0.062500,0.375000,-0.312500},
-			{-0.500000,0.375000,-0.500000,0.500000,0.500000,-0.312500}, 
+			{-0.5,-0.375,-0.5,-0.125,0.375,-0.3125},
+			{0.125,-0.375,-0.5,0.5,0.375,-0.3125}, 
+			{-0.5,-0.5,-0.5,0.5,-0.375,-0.3125}, 
+			{0.0625,-0.125,-0.5,0.125,0.375,-0.3125},
+			{-0.125,-0.125,-0.5,-0.0625,0.375,-0.3125},
+			{-0.5,0.375,-0.5,0.5,0.5,-0.3125}, 
+			{0.25, -0.5, -0.3125, 0.5, 0.5, -0.125},
+			{-0.5, -0.5, -0.3125, -0.25, 0.5, -0.125},
 		},
 	},
 	selection_box = {
 		type = "fixed",
 		fixed = {
-			{-0.500000,-0.500000,-0.500000,0.500000,0.500000,-0.312500},
+			{-0.5,-0.5,-0.5,0.5,0.5,-0.125},
 		},
 	},
 	})
@@ -363,6 +484,3 @@ if read_setting("castle_structure_murderhole", true) then
 		castle_structure.register_murderhole(material)
 	end
 end
-
-
-
