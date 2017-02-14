@@ -8,6 +8,7 @@ castle_structure_desertstonebrick (Desert Stone Brick) bool true
 castle_structure_stone (Stone) bool true
 castle_structure_sandstone (Sandstone) bool true
 castle_structure_desertstone (Desert Stone) bool true
+castle_structure_wood (Wood) bool true
 
 [Forms]
 

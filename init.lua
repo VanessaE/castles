@@ -11,7 +11,6 @@ function castle.fix_rotation_nsew(pos, placer, itemstack, pointed_thing)
 	minetest.swap_node(pos, { name = node.name, param2 = fdir })
 end
 
-dofile(minetest.get_modpath("castle").."/castle_structure.lua")
 dofile(minetest.get_modpath("castle").."/tapestry.lua")
 dofile(minetest.get_modpath("castle").."/jailbars.lua")
 dofile(minetest.get_modpath("castle").."/town_item.lua")
@@ -32,6 +31,9 @@ minetest.register_node("castle:stonewall", {
 	sunlight_propagates = false,
 	sounds = default.node_sound_stone_defaults(),
 })
+
+dofile(minetest.get_modpath("castle").."/castle_structure.lua")
+
 
 minetest.register_node("castle:rubble", {
 	description = "Castle Rubble",
