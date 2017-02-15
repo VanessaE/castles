@@ -1,3 +1,5 @@
+minetest.register_alias("castle:pavement",      "castle:pavement_brick")
+
 minetest.register_node("castle:stonewall", {
 	description = "Castle Wall",
 	drawtype = "normal",

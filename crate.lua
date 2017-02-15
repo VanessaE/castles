@@ -1,3 +1,5 @@
+minetest.register_alias("darkage:box",         "castle:crate")
+
 minetest.register_node("castle:crate", {
 	description = "Crate",
 	drawtype = "normal",
