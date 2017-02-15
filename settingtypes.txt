@@ -14,4 +14,4 @@ castle_structure_wood (Wood) bool true
 
 castle_structure_pillar (Pillars) bool true
 castle_structure_arrowslit (Arrow slits) bool true
-castle_structure_murderhole (Murder holes) bool true
+castle_structure_murderhole (Murder holes and machicolations) bool true
