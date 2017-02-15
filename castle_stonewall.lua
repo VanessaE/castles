@@ -1,7 +1,11 @@
 minetest.register_alias("castle:pavement",      "castle:pavement_brick")
 
+-- internationalization boilerplate
+local MP = minetest.get_modpath(minetest.get_current_modname())
+local S, NS = dofile(MP.."/intllib.lua")
+
 minetest.register_node("castle:stonewall", {
-	description = "Castle Wall",
+	description = S("Castle Wall"),
 	drawtype = "normal",
 	tiles = {"castle_stonewall.png"},
 	paramtype = "light",
@@ -13,7 +17,7 @@ minetest.register_node("castle:stonewall", {
 
 
 minetest.register_node("castle:rubble", {
-	description = "Castle Rubble",
+	description = S("Castle Rubble"),
 	drawtype = "normal",
 	tiles = {"castle_rubble.png"},
 	paramtype = "light",
@@ -48,7 +52,7 @@ minetest.register_node("castle:stonewall_corner", {
 	drawtype = "normal",
 	paramtype = "light",
 	paramtype2 = "facedir",
-	description = "Castle Corner",
+	description = S("Castle Corner"),
 	tiles = {"castle_corner_stonewall_tb.png^[transformR90",
 		 "castle_corner_stonewall_tb.png^[transformR180",
 		 "castle_corner_stonewall1.png",
@@ -69,7 +73,7 @@ minetest.register_craft({
 
 if minetest.get_modpath("moreblocks") then
 	stairsplus:register_all("castle", "stonewall", "castle:stonewall", {
-		description = "Stone Wall",
+		description = S("Stone Wall"),
 		tiles = {"castle_stonewall.png"},
 		groups = {cracky=3, not_in_creative_inventory=1},
 		sounds = default.node_sound_stone_defaults(),
@@ -77,7 +81,7 @@ if minetest.get_modpath("moreblocks") then
 	})
 
 	stairsplus:register_all("castle", "rubble", "castle:rubble", {
-		description = "Rubble",
+		description = S("Rubble"),
 		tiles = {"castle_rubble.png"},
 		groups = {cracky=3, not_in_creative_inventory=1},
 		sounds = default.node_sound_gravel_defaults(),
@@ -88,23 +92,23 @@ elseif minetest.get_modpath("stairs") then
 	stairs.register_stair_and_slab("stonewall", "castle:stonewall",
 		{cracky=3},
 		{"castle_stonewall.png"},
-		"Castle Stonewall Stair",
-		"Castle Stonewall Slab",
+		S("Castle Stonewall Stair"),
+		S("Castle Stonewall Slab"),
 		default.node_sound_stone_defaults()
 	)
 
 	stairs.register_stair_and_slab("rubble", "castle:rubble",
 		{cracky=3},
 		{"castle_rubble.png"},
-		"Castle Rubble Stair",
-		"Castle Rubble Slab",
+		S("Castle Rubble Stair"),
+		S("Castle Rubble Slab"),
 		default.node_sound_stone_defaults()
 	)
 end
 
 
 minetest.register_node("castle:dungeon_stone", {
-	description = "Dungeon Stone",
+	description = S("Dungeon Stone"),
 	drawtype = "normal",
 	tiles = {"castle_dungeon_stone.png"},
 	groups = {cracky=2},
@@ -129,7 +133,7 @@ minetest.register_craft({
 
 
 minetest.register_node("castle:pavement_brick", {
-	description = "Paving Stone",
+	description = S("Paving Stone"),
 	drawtype = "normal",
 	tiles = {"castle_pavement_brick.png"},
 	groups = {cracky=2},
@@ -148,7 +152,7 @@ minetest.register_craft({
 
 if minetest.get_modpath("moreblocks") then
 	stairsplus:register_all("castle", "dungeon_stone", "castle:dungeon_stone", {
-		description = "Dungeon Stone",
+		description = S("Dungeon Stone"),
 		tiles = {"castle_dungeon_stone.png"},
 		groups = {cracky=2, not_in_creative_inventory=1},
 		sounds = default.node_sound_stone_defaults(),
@@ -156,7 +160,7 @@ if minetest.get_modpath("moreblocks") then
 	})
 
 	stairsplus:register_all("castle", "pavement_brick", "castle:pavement_brick", {
-		description = "Pavement Brick",
+		description = S("Pavement Brick"),
 		tiles = {"castle_pavement_brick.png"},
 		groups = {cracky=2, not_in_creative_inventory=1},
 		sounds = default.node_sound_stone_defaults(),
@@ -167,16 +171,16 @@ elseif minetest.get_modpath("stairs") then
 	stairs.register_stair_and_slab("dungeon_stone", "castle:dungeon_stone",
 		{cracky=2},
 		{"castle_dungeon_stone.png"},
-		"Dungeon Stone Stair",
-		"Dungeon Stone Slab",
+		S("Dungeon Stone Stair"),
+		S("Dungeon Stone Slab"),
 		default.node_sound_stone_defaults()
 	)
 
 	stairs.register_stair_and_slab("pavement_brick", "castle:pavement_brick",
 		{cracky=2},
 		{"castle_pavement_brick.png"},
-		"Castle Pavement Stair",
-		"Castle Pavement Slab",
+		S("Castle Pavement Stair"),
+		S("Castle Pavement Slab"),
 		default.node_sound_stone_defaults()
 	)
 end

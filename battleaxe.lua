@@ -1,5 +1,9 @@
+-- internationalization boilerplate
+local MP = minetest.get_modpath(minetest.get_current_modname())
+local S, NS = dofile(MP.."/intllib.lua")
+
 minetest.register_tool("castle:battleaxe", {
-	description = "Battleaxe",
+	description = S("Battleaxe"),
 	inventory_image = "castle_battleaxe.png",
 	tool_capabilities = {
 		full_punch_interval = 2.0,

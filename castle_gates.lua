@@ -1,6 +1,10 @@
+-- internationalization boilerplate
+local MP = minetest.get_modpath(minetest.get_current_modname())
+local S, NS = dofile(MP.."/intllib.lua")
+
 doors.register("castle:oak_door", {
 	tiles = {{ name = "castle_door_oak.png", backface_culling = true }},
-	description = "Oak Door",
+	description = S("Oak Door"),
 	inventory_image = "castle_oak_door_inv.png",
 	protected = true,
 	groups = { choppy = 2, door = 1 },
@@ -14,7 +18,7 @@ doors.register("castle:oak_door", {
 
 doors.register("castle:jail_door", {
 	tiles = {{ name = "castle_door_jail.png", backface_culling = true }},
-	description = "Jail Door",
+	description = S("Jail Door"),
 	inventory_image = "castle_jail_door_inv.png",
 	protected = true,
 	groups = { cracky = 2, door = 1},
@@ -29,7 +33,7 @@ doors.register("castle:jail_door", {
 
 if minetest.get_modpath("xpanes") then
 	xpanes.register_pane("jailbars", {
-		description = "Jail Bars",
+		description = S("Jail Bars"),
 		tiles = {"castle_jailbars.png"},
 		drawtype = "airlike",
 		paramtype = "light",
