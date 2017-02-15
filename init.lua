@@ -12,7 +12,6 @@ function castle.fix_rotation_nsew(pos, placer, itemstack, pointed_thing)
 end
 
 dofile(minetest.get_modpath("castle").."/tapestry.lua")
-dofile(minetest.get_modpath("castle").."/jailbars.lua")
 dofile(minetest.get_modpath("castle").."/town_item.lua")
 dofile(minetest.get_modpath("castle").."/shields_decor.lua")
 dofile(minetest.get_modpath("castle").."/orbs.lua")
@@ -21,74 +20,10 @@ dofile(minetest.get_modpath("castle").."/crossbow.lua")
 
 -- nodes
 
-minetest.register_node("castle:stonewall", {
-	description = "Castle Wall",
-	drawtype = "normal",
-	tiles = {"castle_stonewall.png"},
-	paramtype = "light",
-	drop = "castle:stonewall",
-	groups = {cracky=3},
-	sunlight_propagates = false,
-	sounds = default.node_sound_stone_defaults(),
-})
-
+dofile(minetest.get_modpath("castle").."/castle_stonewall.lua")
 dofile(minetest.get_modpath("castle").."/castle_structure.lua")
+dofile(minetest.get_modpath("castle").."/castle_gates.lua")
 
-
-minetest.register_node("castle:rubble", {
-	description = "Castle Rubble",
-	drawtype = "normal",
-	tiles = {"castle_rubble.png"},
-	paramtype = "light",
-	groups = {crumbly=3,falling_node=1},
-	sounds = default.node_sound_gravel_defaults(),
-})
-
-minetest.register_craft({
-	output = "castle:stonewall",
-	recipe = {
-		{"default:cobble"},
-		{"default:desert_stone"},
-	}
-})
-
-minetest.register_craft({
-	output = "castle:rubble",
-	recipe = {
-		{"castle:stonewall"},
-	}
-})
-
-minetest.register_craft({
-	output = "castle:rubble 2",
-	recipe = {
-		{"default:gravel"},
-		{"default:desert_stone"},
-	}
-})
-
-minetest.register_node("castle:stonewall_corner", {
-	drawtype = "normal",
-	paramtype = "light",
-	paramtype2 = "facedir",
-	description = "Castle Corner",
-	tiles = {"castle_corner_stonewall_tb.png^[transformR90",
-		 "castle_corner_stonewall_tb.png^[transformR180",
-		 "castle_corner_stonewall1.png",
-		 "castle_stonewall.png",
-		 "castle_stonewall.png",	
-		 "castle_corner_stonewall2.png"},
-	groups = {cracky=3},
-	sounds = default.node_sound_stone_defaults(),
-})
-
-minetest.register_craft({
-	output = "castle:stonewall_corner",
-	recipe = {
-		{"", "castle:stonewall"},
-		{"castle:stonewall", "default:sandstone"},
-	}
-})
 
 minetest.register_node("castle:roofslate", {
 	drawtype = "raillike",
@@ -179,34 +114,6 @@ if not (mod_building_blocks or mod_streets) then
 
 end
 
-doors.register("castle:oak_door", {
-	tiles = {{ name = "castle_door_oak.png", backface_culling = true }},
-	description = "Oak Door",
-	inventory_image = "castle_oak_door_inv.png",
-	protected = true,
-	groups = { choppy = 2, door = 1 },
-	sounds = default.node_sound_wood_defaults(),
-	recipe = {
-		{"default:tree", "default:tree"},
-		{"default:tree", "default:tree"},
-		{"default:tree", "default:tree"},
-	}
-})
-
-doors.register("castle:jail_door", {
-	tiles = {{ name = "castle_door_jail.png", backface_culling = true }},
-	description = "Jail Door",
-	inventory_image = "castle_jail_door_inv.png",
-	protected = true,
-	groups = { cracky = 2, door = 1},
-	sound_open = "doors_steel_door_open",
-	sound_close = "doors_steel_door_close",
-	recipe = {
-		{"castle:jailbars", "castle:jailbars"},
-		{"castle:jailbars", "castle:jailbars"},
-		{"castle:jailbars", "castle:jailbars"},
-	}
-})
 
 function default.get_ironbound_chest_formspec(pos)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z

@@ -1,4 +1,3 @@
-
 minetest.register_alias("castle:pillars_bottom", "castle:pillars_stonewall_bottom")
 minetest.register_alias("castle:pillars_top", "castle:pillars_stonewall_top")
 minetest.register_alias("castle:pillars_middle", "castle:pillars_stonewall_middle")
@@ -66,6 +65,7 @@ local get_material_properties = function(material)
 		composition_def = minetest.registered_nodes[material.craft_material]
 		burn_time = minetest.get_craft_result({method="fuel", width=1, items={ItemStack(material.craft_materia)}}).time
 	end
+	
 	local tiles = material.tile
 	if tiles == nil then
 		tiles = composition_def.tile
