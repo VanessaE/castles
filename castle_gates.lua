@@ -143,7 +143,6 @@ local lock_slot = function(pos)
 	timer:start(2)
 end
 
-
 local trigger_move = function(pos, node, direction)
 	local directions = get_directions(node.param2)
 	local all_slots = {}
@@ -151,15 +150,15 @@ local trigger_move = function(pos, node, direction)
 	get_row(pos, directions.left, all_slots)
 	for _, slot in pairs(all_slots) do
 		lock_slot(slot.pos)			
-	end
+	end -- lock all of the connected slots other than this one
 	
-	table.insert(all_slots, {["pos"]=pos})
+	table.insert(all_slots, {["pos"]=pos}) -- add this one to the table.
 	
 	local can_move_up = true
 	local can_move_down = true
 	
 	for _, slot in pairs(all_slots) do
-		local port_pos = vector.add(slot.pos, directions.back)
+		local port_pos = vector.add(slot.pos, directions.back) -- the position adjacent to this slot that holds the portcullis
 		local port_node = minetest.get_node(port_pos)
 		
 		if minetest.get_item_group(port_node.name, "portcullis") + minetest.get_item_group(port_node.name, "portcullis_edge") == 0 then
@@ -167,8 +166,8 @@ local trigger_move = function(pos, node, direction)
 			can_move_up = false
 			can_move_down = false
 		else
-			slot.above = scan_for_portcullis(port_pos, directions.top)
-			slot.below = scan_for_portcullis(port_pos, directions.bottom)
+			slot.above = scan_for_portcullis(port_pos, directions.top) -- this gets us the position one above the top portcullis node
+			slot.below = scan_for_portcullis(port_pos, directions.bottom) -- this gets us the position one below the bottom portcullis node
 			
 			local node_above = minetest.get_node(slot.above).name
 			local node_below = minetest.get_node(slot.below).name
