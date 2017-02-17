@@ -54,6 +54,13 @@ end
 if read_setting("castle_structure_wood", false) then
 	table.insert(materials, {name="wood", desc=S("Wood"), tile="default_wood.png", craft_material="group:wood", composition_material="default:wood"})
 end
+if read_setting("castle_structure_ice", false) then
+	table.insert(materials, {name="ice", desc=S("Ice"), tile="default_ice.png", craft_material="default:ice"})
+end
+if read_setting("castle_structure_snow", false) then
+	table.insert(materials, {name="snow", desc=S("Snow"), tile="default_snow.png", craft_material="default:snow"})
+end
+
 
 local get_material_properties = function(material)
 	local composition_def
