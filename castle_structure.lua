@@ -92,9 +92,10 @@ end
 
 castle_structure.register_murderhole = function(material)
 	local composition_def, burn_time, tile, desc = get_material_properties(material)
+	local mod_name = minetest.get_current_modname()
 	
 	-- Node Definition
-	minetest.register_node("castle:hole_"..material.name, {
+	minetest.register_node(mod_name..":hole_"..material.name, {
 		drawtype = "nodebox",
 		description = S("@1 Murder Hole", desc),
 		tiles = tile,
@@ -113,7 +114,7 @@ castle_structure.register_murderhole = function(material)
 		},
 	})
 	
-	minetest.register_node("castle:machicolation_"..material.name, {
+	minetest.register_node(mod_name..":machicolation_"..material.name, {
 		drawtype = "nodebox",
 		description = S("@1 Machicolation", desc),
 		tiles = tile,
@@ -132,7 +133,7 @@ castle_structure.register_murderhole = function(material)
 	})
 
 	minetest.register_craft({
-		output = "castle:hole_"..material.name.." 4",
+		output = mod_name..":hole_"..material.name.." 4",
 		recipe = {
 			{"",material.craft_material, "" },
 			{material.craft_material,"", material.craft_material},
@@ -141,25 +142,25 @@ castle_structure.register_murderhole = function(material)
 	})
 
 	minetest.register_craft({
-		output = "castle:machicolation_"..material.name,
+		output = mod_name..":machicolation_"..material.name,
 		type="shapeless",
-		recipe = {"castle:hole_"..material.name},
+		recipe = {mod_name..":hole_"..material.name},
 	})
 	minetest.register_craft({
-		output = "castle:hole_"..material.name,
+		output = mod_name..":hole_"..material.name,
 		type="shapeless",
-		recipe = {"castle:machicolation_"..material.name},
+		recipe = {mod_name..":machicolation_"..material.name},
 	})
 	
 	if burn_time > 0 then
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:hole_"..material.name,
+			recipe = mod_name..":hole_"..material.name,
 			burntime = burn_time,
 		})
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:machicolation_"..material.name,
+			recipe = mod_name..":machicolation_"..material.name,
 			burntime = burn_time,
 		})	
 	end
@@ -174,9 +175,11 @@ castle_structure.register_pillar = function(material)
 		crossbrace_connectable_groups[group] = val
 	end	
 	crossbrace_connectable_groups.crossbrace_connectable = 1
+
+	local mod_name = minetest.get_current_modname()
 	
 	-- Node Definition
-	minetest.register_node("castle:pillars_"..material.name.."_bottom", {
+	minetest.register_node(mod_name..":pillars_"..material.name.."_bottom", {
 		drawtype = "nodebox",
 		description = S("@1 Pillar Base", desc),
 		tiles = tile,
@@ -194,7 +197,7 @@ castle_structure.register_pillar = function(material)
 		},
 	})
 
-	minetest.register_node("castle:pillars_"..material.name.."_bottom_half", {
+	minetest.register_node(mod_name..":pillars_"..material.name.."_bottom_half", {
 		drawtype = "nodebox",
 		description = S("@1 Half Pillar Base", desc),
 		tiles = tile,
@@ -212,7 +215,7 @@ castle_structure.register_pillar = function(material)
 		},
 	})
 	
-	minetest.register_node("castle:pillars_"..material.name.."_top", {
+	minetest.register_node(mod_name..":pillars_"..material.name.."_top", {
 		drawtype = "nodebox",
 		description = S("@1 Pillar Top", desc),
 		tiles = tile,
@@ -230,7 +233,7 @@ castle_structure.register_pillar = function(material)
 		},
 	})
 
-	minetest.register_node("castle:pillars_"..material.name.."_top_half", {
+	minetest.register_node(mod_name..":pillars_"..material.name.."_top_half", {
 		drawtype = "nodebox",
 		description = S("@1 Half Pillar Top", desc),
 		tiles = tile,
@@ -248,7 +251,7 @@ castle_structure.register_pillar = function(material)
 		},
 	})	
 
-	minetest.register_node("castle:pillars_"..material.name.."_middle", {
+	minetest.register_node(mod_name..":pillars_"..material.name.."_middle", {
 		drawtype = "nodebox",
 		description = S("@1 Pillar Middle", desc),
 		tiles = tile,
@@ -264,7 +267,7 @@ castle_structure.register_pillar = function(material)
 		},
 	})
 
-	minetest.register_node("castle:pillars_"..material.name.."_middle_half", {
+	minetest.register_node(mod_name..":pillars_"..material.name.."_middle_half", {
 		drawtype = "nodebox",
 		description = S("@1 Half Pillar Middle", desc),
 		tiles = tile,
@@ -280,7 +283,7 @@ castle_structure.register_pillar = function(material)
 		},
 	})
 	
-	minetest.register_node("castle:pillars_"..material.name.."_crossbrace",
+	minetest.register_node(mod_name..":pillars_"..material.name.."_crossbrace",
 	{
 		drawtype = "nodebox",
 		description = S("@1 Crossbrace", desc),
@@ -297,12 +300,12 @@ castle_structure.register_pillar = function(material)
 			connect_back = {-0.25,0.25,0.25,0.25,0.5,0.75}, -- +Z
 			connect_right = {0.25,0.25,-0.25,0.75,0.5,0.25}, -- +X
 		},
-		connects_to = { "castle:pillars_"..material.name.."_crossbrace", "group:crossbrace_connectable"},
+		connects_to = { mod_name..":pillars_"..material.name.."_crossbrace", "group:crossbrace_connectable"},
 		connect_sides = { "front", "left", "back", "right" },
 	})
 	
 	minetest.register_craft({
-		output = "castle:pillars_"..material.name.."_bottom 4",
+		output = mod_name..":pillars_"..material.name.."_bottom 4",
 		recipe = {
 			{"",material.craft_material,""},
 			{"",material.craft_material,""},
@@ -310,7 +313,7 @@ castle_structure.register_pillar = function(material)
 	})
 
 	minetest.register_craft({
-		output = "castle:pillars_"..material.name.."_top 4",
+		output = mod_name..":pillars_"..material.name.."_top 4",
 		recipe = {
 			{material.craft_material,material.craft_material,material.craft_material},
 			{"",material.craft_material,""},
@@ -318,7 +321,7 @@ castle_structure.register_pillar = function(material)
 	})
 
 	minetest.register_craft({
-		output = "castle:pillars_"..material.name.."_middle 4",
+		output = mod_name..":pillars_"..material.name.."_middle 4",
 		recipe = {
 			{material.craft_material,material.craft_material},
 			{material.craft_material,material.craft_material},
@@ -326,7 +329,7 @@ castle_structure.register_pillar = function(material)
 	})
 	
 	minetest.register_craft({
-		output = "castle:pillars_"..material.name.."_crossbrace 10",
+		output = mod_name..":pillars_"..material.name.."_crossbrace 10",
 		recipe = {
 			{material.craft_material,"",material.craft_material},
 			{"",material.craft_material,""},
@@ -334,72 +337,72 @@ castle_structure.register_pillar = function(material)
 	})
 	
 	minetest.register_craft({
-		output = "castle:pillars_"..material.name.."_middle_half 2",
+		output = mod_name..":pillars_"..material.name.."_middle_half 2",
 		type="shapeless",
-		recipe = {"castle:pillars_"..material.name.."_middle"},
+		recipe = {mod_name..":pillars_"..material.name.."_middle"},
 	})
 	minetest.register_craft({
-		output = "castle:pillars_"..material.name.."_middle",
+		output = mod_name..":pillars_"..material.name.."_middle",
 		type="shapeless",
-		recipe = {"castle:pillars_"..material.name.."_middle_half", "castle:pillars_"..material.name.."_middle_half"},
-	})
-
-	minetest.register_craft({
-		output = "castle:pillars_"..material.name.."_top_half 2",
-		type="shapeless",
-		recipe = {"castle:pillars_"..material.name.."_top"},
-	})
-	minetest.register_craft({
-		output = "castle:pillars_"..material.name.."_top",
-		type="shapeless",
-		recipe = {"castle:pillars_"..material.name.."_top_half", "castle:pillars_"..material.name.."_top_half"},
+		recipe = {mod_name..":pillars_"..material.name.."_middle_half", mod_name..":pillars_"..material.name.."_middle_half"},
 	})
 
 	minetest.register_craft({
-		output = "castle:pillars_"..material.name.."_bottom_half 2",
+		output = mod_name..":pillars_"..material.name.."_top_half 2",
 		type="shapeless",
-		recipe = {"castle:pillars_"..material.name.."_bottom"},
+		recipe = {mod_name..":pillars_"..material.name.."_top"},
 	})
 	minetest.register_craft({
-		output = "castle:pillars_"..material.name.."_bottom",
+		output = mod_name..":pillars_"..material.name.."_top",
 		type="shapeless",
-		recipe = {"castle:pillars_"..material.name.."_bottom_half", "castle:pillars_"..material.name.."_bottom_half"},
+		recipe = {mod_name..":pillars_"..material.name.."_top_half", mod_name..":pillars_"..material.name.."_top_half"},
+	})
+
+	minetest.register_craft({
+		output = mod_name..":pillars_"..material.name.."_bottom_half 2",
+		type="shapeless",
+		recipe = {mod_name..":pillars_"..material.name.."_bottom"},
+	})
+	minetest.register_craft({
+		output = mod_name..":pillars_"..material.name.."_bottom",
+		type="shapeless",
+		recipe = {mod_name..":pillars_"..material.name.."_bottom_half", mod_name..":pillars_"..material.name.."_bottom_half"},
 	})
 	
 	if burn_time > 0 then
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:pillars_"..material.name.."_top",
+			recipe = mod_name..":pillars_"..material.name.."_top",
 			burntime = burn_time*5/4,
 		})	
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:pillars_"..material.name.."_top_half",
+			recipe = mod_name..":pillars_"..material.name.."_top_half",
 			burntime = burn_time*5/8,
 		})
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:pillars_"..material.name.."_bottom",
+			recipe = mod_name..":pillars_"..material.name.."_bottom",
 			burntime = burn_time*5/4,
 		})	
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:pillars_"..material.name.."_bottom_half",
+			recipe = mod_name..":pillars_"..material.name.."_bottom_half",
 			burntime = burn_time*5/8,
 		})	
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:pillars_"..material.name.."_middle",
+			recipe = mod_name..":pillars_"..material.name.."_middle",
 			burntime = burn_time*6/4,
 		})
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:pillars_"..material.name.."_middle_half",
+			recipe = mod_name..":pillars_"..material.name.."_middle_half",
 			burntime = burn_time*6/8,
 		})
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:pillars_"..material.name.."_crossbrace",
+			recipe = mod_name..":pillars_"..material.name.."_crossbrace",
 			burntime = burn_time*5/10,
 		})
 	end
@@ -410,9 +413,10 @@ end
 
 castle_structure.register_arrowslit = function(material)
 	local composition_def, burn_time, tile, desc = get_material_properties(material)
+	local mod_name = minetest.get_current_modname()
 
 	-- Node Definition
-	minetest.register_node("castle:arrowslit_"..material.name, {
+	minetest.register_node(mod_name..":arrowslit_"..material.name, {
 		drawtype = "nodebox",
 		description = S("@1 Arrowslit", desc),
 		tiles = tile,
@@ -439,7 +443,7 @@ castle_structure.register_arrowslit = function(material)
 	},
 	})
 
-	minetest.register_node("castle:arrowslit_"..material.name.."_cross", {
+	minetest.register_node(mod_name..":arrowslit_"..material.name.."_cross", {
 		drawtype = "nodebox",
 		description = S("@1 Arrowslit with Cross", desc),
 		tiles = tile,
@@ -470,7 +474,7 @@ castle_structure.register_arrowslit = function(material)
 	},
 	})
 
-	minetest.register_node("castle:arrowslit_"..material.name.."_hole", {
+	minetest.register_node(mod_name..":arrowslit_"..material.name.."_hole", {
 		drawtype = "nodebox",
 		description = S("@1 Arrowslit with Hole", desc),
 		tiles = tile,
@@ -499,7 +503,7 @@ castle_structure.register_arrowslit = function(material)
 	},
 	})
 
-	minetest.register_node("castle:arrowslit_"..material.name.."_embrasure", {
+	minetest.register_node(mod_name..":arrowslit_"..material.name.."_embrasure", {
 		drawtype = "nodebox",
 		description = S("@1 Embrasure", desc),
 		tiles = tile,
@@ -527,7 +531,7 @@ castle_structure.register_arrowslit = function(material)
 	})
 	
 	minetest.register_craft({
-		output = "castle:arrowslit_"..material.name.." 6",
+		output = mod_name..":arrowslit_"..material.name.." 6",
 		recipe = {
 		{material.craft_material,"", material.craft_material},
 		{material.craft_material,"", material.craft_material},
@@ -535,55 +539,55 @@ castle_structure.register_arrowslit = function(material)
 	})
 
 	minetest.register_craft({
-		output = "castle:arrowslit_"..material.name.."_cross",
+		output = mod_name..":arrowslit_"..material.name.."_cross",
 		recipe = {
-		{"castle:arrowslit_"..material.name} },
+		{mod_name..":arrowslit_"..material.name} },
 	})
 	minetest.register_craft({
-		output = "castle:arrowslit_"..material.name.."_hole",
+		output = mod_name..":arrowslit_"..material.name.."_hole",
 		recipe = {
-		{"castle:arrowslit_"..material.name.."_cross"} },
+		{mod_name..":arrowslit_"..material.name.."_cross"} },
 	})
 	minetest.register_craft({
-		output = "castle:arrowslit_"..material.name.."_embrasure",
+		output = mod_name..":arrowslit_"..material.name.."_embrasure",
 		recipe = {
-		{"castle:arrowslit_"..material.name.."_hole"} },
+		{mod_name..":arrowslit_"..material.name.."_hole"} },
 	})
 	minetest.register_craft({
-		output = "castle:arrowslit_"..material.name,
+		output = mod_name..":arrowslit_"..material.name,
 		recipe = {
-		{"castle:arrowslit_"..material.name.."_embrasure"} },
+		{mod_name..":arrowslit_"..material.name.."_embrasure"} },
 	})
 	
 	if burn_time > 0 then
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:arrowslit_"..material.name,
+			recipe = mod_name..":arrowslit_"..material.name,
 			burntime = burn_time,
 		})	
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:arrowslit_"..material.name.."_cross",
+			recipe = mod_name..":arrowslit_"..material.name.."_cross",
 			burntime = burn_time,
 		})	
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:arrowslit_"..material.name.."_hole",
+			recipe = mod_name..":arrowslit_"..material.name.."_hole",
 			burntime = burn_time,
 		})	
 		minetest.register_craft({
 			type = "fuel",
-			recipe = "castle:arrowslit_"..material.name.."_embrasure",
+			recipe = mod_name..":arrowslit_"..material.name.."_embrasure",
 			burntime = burn_time,
 		})	
 	end
 
 	local lbm_def = {
-		name = "castle:arrowslit_flip_front_to_back"..material.name,
+		name = mod_name..":arrowslit_flip_front_to_back"..material.name,
 		nodenames = {
-			"castle:arrowslit_"..material.name,
-			"castle:arrowslit_"..material.name.."_cross",
-			"castle:arrowslit_"..material.name.."_hole",
+			mod_name..":arrowslit_"..material.name,
+			mod_name..":arrowslit_"..material.name.."_cross",
+			mod_name..":arrowslit_"..material.name.."_hole",
 		},
 		action = function(pos, node)
 			local flip_front_to_back = {[0]=2, 3, 0, 1, 6, 7, 4, 5, 10, 7, 8, 9, 14, 15, 12, 13, 18, 19, 16, 17, 22, 23, 20, 21}
