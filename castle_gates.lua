@@ -54,34 +54,35 @@ for i = 1, 15 do
 end
 minetest.register_alias("castle:jailbars", "xpanes:jailbars")
 
-
-local get_directions = function(facedir)
-	local directions = {}
+-- Given a facedir, returns a set of all the corresponding directions
+local get_dirs = function(facedir)
+	local dirs = {}
 	local top = {[0]={x=0, y=1, z=0},
 		{x=0, y=0, z=1},
 		{x=0, y=0, z=-1},
 		{x=1, y=0, z=0},
 		{x=-1, y=0, z=0},
-		{x=0, y=-1, z=0}}
-	
-	directions.back = minetest.facedir_to_dir(facedir)
-	directions.top = top[math.floor(facedir/4)]
-	directions.right = {
-		x=directions.top.y*directions.back.z - directions.back.y*directions.top.z,
-		y=directions.top.z*directions.back.x - directions.back.z*directions.top.x,
-		z=directions.top.x*directions.back.y - directions.back.x*directions.top.y
+		{x=0, y=-1, z=0}}	
+	dirs.back = minetest.facedir_to_dir(facedir)
+	dirs.top = top[math.floor(facedir/4)]
+	dirs.right = {
+		x=dirs.top.y*dirs.back.z - dirs.back.y*dirs.top.z,
+		y=dirs.top.z*dirs.back.x - dirs.back.z*dirs.top.x,
+		z=dirs.top.x*dirs.back.y - dirs.back.x*dirs.top.y
 	}
-	directions.front = vector.multiply(directions.back, -1)
-	directions.bottom = vector.multiply(directions.top, -1)
-	directions.left = vector.multiply(directions.right, -1)
-	return directions
+	dirs.front = vector.multiply(dirs.back, -1)
+	dirs.bottom = vector.multiply(dirs.top, -1)
+	dirs.left = vector.multiply(dirs.right, -1)
+	return dirs
 end
 
+-- Starting from pos, scans in the dir direction finding portcullis nodes
+-- Continues scanning in a loop for each portcullis node, but stops after it encounters
+-- a portcullis_edge node. This is useful when making dual sliding gates that meet at a junction.
+-- Returns the pos lying one node *past* the end of the portcullis.
 local scan_for_portcullis = function(pos, dir)
 	local scan_pos = vector.new(pos)
-
 	local done = false
-	local contains_protected = false -- TODO: check for this and return it
 	while not done do
 		local node = minetest.get_node(scan_pos)
 		if minetest.get_item_group(node.name, "portcullis") > 0 then
@@ -99,7 +100,10 @@ local scan_for_portcullis = function(pos, dir)
 	return scan_pos
 end
 
-local get_row = function(pos, dir, output)
+-- Similar to the above, starts at pos and scans in the direction dir.
+-- Unlike above, this only gets *identical* nodes (using the first one as an example)
+-- both in node type and facing. Places a list of positions into the output table.
+local scan_for_slot_row = function(pos, dir, output)
 	local finished = false
 	local node = minetest.get_node(pos)
 	local pos_dir = vector.add(pos, dir)
@@ -115,7 +119,9 @@ local get_row = function(pos, dir, output)
 	return output
 end
 
-
+-- Actually slides the columns of portcullis nodes, as defined in the "port" table
+-- dir is the axis the portcullis is moving along and up is a boolean that determines which
+-- end of the portcullis table's node lists to start from (if up is true it starts moving at the "above" end)
 local move_portcullis = function(port, dir, up)
 	minetest.debug("")
 	for _, slot in pairs(port) do
@@ -136,6 +142,8 @@ local move_portcullis = function(port, dir, up)
 	end
 end
 
+--sets a node's metadata to "lock" it against outside interaction and also sets a timer
+--to remove that lock in 2 seconds (timer will be refreshed if it's locked again before then)
 local lock_slot = function(pos)
 	local meta = minetest.get_meta(pos)
 	meta:set_string("locked", "true")
@@ -143,11 +151,13 @@ local lock_slot = function(pos)
 	timer:start(2)
 end
 
+-- pos and node are a portcullis slot.
+-- direction is either "up" or "down"
 local trigger_move = function(pos, node, direction)
-	local directions = get_directions(node.param2)
+	local dirs = get_dirs(node.param2)
 	local all_slots = {}
-	get_row(pos, directions.right, all_slots)
-	get_row(pos, directions.left, all_slots)
+	scan_for_slot_row(pos, dirs.right, all_slots)
+	scan_for_slot_row(pos, dirs.left, all_slots)
 	for _, slot in pairs(all_slots) do
 		lock_slot(slot.pos)			
 	end -- lock all of the connected slots other than this one
@@ -158,7 +168,7 @@ local trigger_move = function(pos, node, direction)
 	local can_move_down = true
 	
 	for _, slot in pairs(all_slots) do
-		local port_pos = vector.add(slot.pos, directions.back) -- the position adjacent to this slot that holds the portcullis
+		local port_pos = vector.add(slot.pos, dirs.back) -- the position adjacent to this slot that holds the portcullis
 		local port_node = minetest.get_node(port_pos)
 		
 		if minetest.get_item_group(port_node.name, "portcullis") + minetest.get_item_group(port_node.name, "portcullis_edge") == 0 then
@@ -166,8 +176,8 @@ local trigger_move = function(pos, node, direction)
 			can_move_up = false
 			can_move_down = false
 		else
-			slot.above = scan_for_portcullis(port_pos, directions.top) -- this gets us the position one above the top portcullis node
-			slot.below = scan_for_portcullis(port_pos, directions.bottom) -- this gets us the position one below the bottom portcullis node
+			slot.above = scan_for_portcullis(port_pos, dirs.top) -- this gets us the position one above the top portcullis node
+			slot.below = scan_for_portcullis(port_pos, dirs.bottom) -- this gets us the position one below the bottom portcullis node
 			
 			local node_above = minetest.get_node(slot.above).name
 			local node_below = minetest.get_node(slot.below).name
@@ -175,27 +185,41 @@ local trigger_move = function(pos, node, direction)
 			can_move_up = can_move_up and
 				minetest.registered_nodes[node_above].buildable_to and
 				node_above ~= "ignore" and
-				not vector.equals(port_pos, vector.add(slot.below, directions.top))
+				not vector.equals(port_pos, vector.add(slot.below, dirs.top))
 			can_move_down = can_move_down and
 				minetest.registered_nodes[node_below].buildable_to and
 				node_below ~= "ignore" and
-				not vector.equals(port_pos, vector.add(slot.above, directions.bottom))
+				not vector.equals(port_pos, vector.add(slot.above, dirs.bottom))
 		end		
 	end
 	
 	if direction == "up" then
 		if can_move_up then
-			move_portcullis(all_slots, directions.top, true)
+			move_portcullis(all_slots, dirs.top, true)
 			minetest.get_node_timer(pos):start(1)
+			minetest.get_meta(pos):set_string("controlling", "true")
 		else
-			minetest.get_meta(pos):set_string("direction",  "down")
+			for _, slot in pairs(all_slots) do
+				-- movement finished, reset everything and toggle direction
+				local slot_meta = minetest.get_meta(slot.pos)
+				slot_meta:set_string("controlling", nil) -- only one node should be controlling, but wipe everything to be on the safe side
+				slot_meta:set_string("locked", nil)
+				slot_meta:set_string("direction",  "down")
+			end
 		end
 	elseif direction == "down" then
 		if can_move_down then
-			move_portcullis(all_slots, directions.bottom, false)
+			move_portcullis(all_slots, dirs.bottom, false)
 			minetest.get_node_timer(pos):start(1)
+			minetest.get_meta(pos):set_string("controlling", "true")
 		else
-			minetest.get_meta(pos):set_string("direction", "up")
+			for _, slot in pairs(all_slots) do
+				-- movement finished, reset everything and toggle direction
+				local slot_meta = minetest.get_meta(slot.pos)
+				slot_meta:set_string("controlling", nil) -- only one node should be controlling, but wipe everything to be on the safe side
+				slot_meta:set_string("locked", nil)
+				slot_meta:set_string("direction",  "up")
+			end
 		end
 	end
 end
@@ -236,11 +260,11 @@ minetest.register_node("castle:portcullis_slot", {
 	
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		local meta = minetest.get_meta(pos)
-		if meta:get_string("locked") ~= "" then
+		if meta:get_string("locked") ~= "" or meta:get_string("controlling") ~= "" then
 			return
 		end
-
-		trigger_move(pos, node, meta:get_string("direction"))
+		meta:set_string("controlling", "true")
+		minetest.get_node_timer(pos):start(1)
 	end,
 	
 	on_timer = function(pos, elapsed)
@@ -249,8 +273,9 @@ minetest.register_node("castle:portcullis_slot", {
 			meta:set_string("locked", nil)
 			return
 		end
-		
-		trigger_move(pos, minetest.get_node(pos), meta:get_string("direction"))
+		if meta:get_string("controlling") ~= "" then
+			trigger_move(pos, minetest.get_node(pos), meta:get_string("direction"))
+		end
 	
 	end,
 })
