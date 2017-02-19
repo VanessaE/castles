@@ -368,3 +368,93 @@ minetest.register_craft({
 		{"castle:portcullis_bars"}
 	},
 })
+
+--------------------------------------------------------------------------------------------------------------
+
+minetest.register_node("castle:gate_hinge", {
+	drawtype = "nodebox",
+	description = S("Gate Door With Hinge"),
+	groups = {choppy = 1},
+	tiles = {
+		"default_wood.png^[transformR90",
+		},
+	paramtype = "light",
+	paramtype2 = "facedir",
+		node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, 0.5, -0.25},
+			{-10/16, -4/16, -10/16, -6/16, 4/16, -6/16},
+		}
+	}
+})
+
+minetest.register_node("castle:gate_panel", {
+	drawtype = "nodebox",
+	description = S("Gate Door"),
+	groups = {choppy = 1},
+	tiles = {
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90",
+		},
+	paramtype = "light",
+	paramtype2 = "facedir",
+		node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, 0.5, -0.25},
+		}
+	}
+})
+
+minetest.register_node("castle:gate_edge", {
+	drawtype = "nodebox",
+	description = S("Gate Door Edge"),
+	groups = {choppy = 1},
+	tiles = {
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90^(default_coal_block.png^[mask:castle_door_edge_mask.png^[transformFX)",
+		"default_wood.png^[transformR90^(default_coal_block.png^[mask:castle_door_edge_mask.png)",
+		},
+	paramtype = "light",
+	paramtype2 = "facedir",
+		node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, 0.5, -0.25},
+		}
+	}
+})
+
+minetest.register_node("castle:gate_edge_handle", {
+	drawtype = "nodebox",
+	description = S("Gate Door With Handle"),
+	groups = {choppy = 1},
+	tiles = {
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_door_side_mask.png)",
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_door_side_mask.png)",
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_door_side_mask.png)",
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:(castle_door_side_mask.png^[transformFX))",
+		"default_wood.png^[transformR90^(default_coal_block.png^[mask:castle_door_edge_mask.png^[transformFX)^(default_steel_block.png^[mask:castle_door_handle_mask.png^[transformFX)",
+		"default_wood.png^[transformR90^(default_coal_block.png^[mask:castle_door_edge_mask.png)^(default_steel_block.png^[mask:castle_door_handle_mask.png)",
+		},
+	paramtype = "light",
+	paramtype2 = "facedir",
+		node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, 0.5, -0.25},
+			{4/16, -4/16, -2/16, 6/16, 4/16, -3/16},
+			{4/16, -4/16, -9/16, 6/16, 4/16, -10/16},
+			{4/16, -4/16, -9/16, 6/16, -3/16, -3/16},
+			{4/16, 4/16, -9/16, 6/16, 3/16, -3/16},
+		}
+	}
+})
