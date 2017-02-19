@@ -125,7 +125,6 @@ end
 -- dir is the axis the portcullis is moving along and up is a boolean that determines which
 -- end of the portcullis table's node lists to start from (if up is true it starts moving at the "above" end)
 local move_portcullis = function(port, dir, up)
-	minetest.debug("")
 	for _, slot in pairs(port) do
 		local start, finish
 		if up then
@@ -371,10 +370,141 @@ minetest.register_craft({
 
 --------------------------------------------------------------------------------------------------------------
 
+dofile(minetest.get_modpath("castle").."/class_pointset.lua")
+
+local get_door_layout = function(pos, facedir, player)
+	-- This method does a flood-fill looking for all nodes that meet the following criteria:
+	-- belongs to a "big_door" group
+	-- has the same "back" direction as the initial node
+	-- is accessible via up, down, left or right directions unless one of those directions goes through an edge that one of the two nodes has marked as a gate edge
+	local door = {}
+
+	door.all = {}
+	door.hinges = {}
+	door.contains_protected_node = false
+	door.directions = get_dirs(facedir)
+	door.can_slide = {}
+	door.previous_move = minetest.get_meta(pos):get_string("previous_move")
+
+	-- temporary pointsets used while searching
+	local to_test = Pointset.create()
+	local tested = Pointset.create()
+	
+	to_test:set_pos(pos, true)
+	
+	local test_pos, _ = to_test:pop()
+	while test_pos ~= nil do
+		local test_node = minetest.get_node(test_pos)
+
+		if test_node.name == "ignore" then
+			--array is next to unloaded nodes, too dangerous to do anything. Abort.
+			return nil
+		end
+		
+		if minetest.is_protected(test_pos, player:get_player_name()) and not minetest.check_player_privs(player, "protection_bypass") then
+			door.contains_protected_node = true
+		end
+		
+		local test_node_def = minetest.registered_nodes[test_node.name]
+		tested:set_pos(test_pos, test_node_def.buildable_to == true) -- track nodes we've looked at, and note if the door can slide into this node while we're at it
+		
+		if test_node_def.paramtype2 == "facedir" then
+			local test_node_dirs = get_dirs(test_node.param2)
+			local coplanar = vector.equals(test_node_dirs.back, door.directions.back)
+
+			if coplanar and (test_node_def.groups.big_door or test_node_def.groups.big_door_hinge) then
+				local entry = {["pos"] = test_pos, ["node"] = test_node}
+				table.insert(door.all, entry)
+				if test_node_def.groups.big_door_hinge then
+					table.insert(door.hinges, entry)
+				end
+				
+				tested:set_pos(test_pos, true) -- since this is part of the door, other parts of the door can slide into it
+
+				local test_directions = {"top", "bottom", "left", "right"}
+				for _, dir in pairs(test_directions) do
+					if test_node_def._gate_edges == nil or not test_node_def._gate_edges[dir] then
+						local adjacent_pos = vector.add(test_pos, door.directions[dir])
+						if tested:get_pos(adjacent_pos) == nil then
+							local adjacent_node = minetest.get_node(adjacent_pos)
+							local adjacent_def = minetest.registered_nodes[adjacent_node.name]
+							if adjacent_def.paramtype2 == "facedir" then -- all doors are facedir nodes so we can pre-screen some targets
+								local edge_points_back_at_test_pos = false
+								-- Look at the adjacent node's definition. If it's got gate edges, check if they point back at us.
+								if adjacent_def._gate_edges ~= nil then
+									local adjacent_directions = get_dirs(adjacent_node.param2)
+									for dir, val in pairs(adjacent_def._gate_edges) do
+										if vector.equals(vector.add(adjacent_pos, adjacent_directions[dir]), test_pos) then
+											edge_points_back_at_test_pos = true
+											break
+										end
+									end									
+								end
+								if not edge_points_back_at_test_pos then
+									to_test:set_pos(adjacent_pos, true)
+								end
+							end
+						end
+					end				
+				end
+			end
+		end
+		
+		test_pos, _ = to_test:pop()
+	end
+	
+	if table.getn(door.hinges) == 0 then
+		--sliding door, evaluate which directions it can go
+		door.can_slide = {up=true, down=true, left=true, right=true}
+		for _,door_node in pairs(door.all) do
+			minetest.debug(dump(door.can_slide))
+			minetest.debug(dump(vector.add(door_node.pos, door.directions.top)))
+			door.can_slide.up = door.can_slide.up and tested:get_pos(vector.add(door_node.pos, door.directions.top))
+			door.can_slide.down = door.can_slide.down and tested:get_pos(vector.add(door_node.pos, door.directions.bottom))
+			door.can_slide.left = door.can_slide.left and tested:get_pos(vector.add(door_node.pos, door.directions.left))
+			door.can_slide.right = door.can_slide.right and tested:get_pos(vector.add(door_node.pos, door.directions.right))
+		end
+	end
+	
+	return door
+end
+
+
+local trigger_gate = function(pos, node, player, itemstack, pointed_thing)
+	local door = get_door_layout(pos, node.param2, player)
+	
+	minetest.debug(dump(door))
+	
+	if door ~= nil then
+		for _, door_node in pairs(door.all) do
+			minetest.set_node(door_node.pos, {name="air"})
+		end
+		
+		if table.getn(door.hinges) == 0 then
+		
+			if door.previous_move == "up" then
+				
+				
+			elseif door.previous_move == "down" then
+			elseif door.previous_move == "left" then
+			elseif door.previous_move == "right" then
+			end
+			
+		end
+
+		for _, door_node in pairs(door.all) do
+			minetest.set_node(door_node.pos, door_node.node)
+			minetest.get_meta(door_node.pos):set_string("previous_move", nil) -- TODO: set this
+		end
+		
+	end	
+end
+
+
 minetest.register_node("castle:gate_hinge", {
 	drawtype = "nodebox",
 	description = S("Gate Door With Hinge"),
-	groups = {choppy = 1},
+	groups = {choppy = 1, big_door_hinge = 1},
 	tiles = {
 		"default_wood.png^[transformR90",
 		},
@@ -386,13 +516,14 @@ minetest.register_node("castle:gate_hinge", {
 			{-0.5, -0.5, -0.5, 0.5, 0.5, -0.25},
 			{-10/16, -4/16, -10/16, -6/16, 4/16, -6/16},
 		}
-	}
+	},
+	on_rightclick = trigger_gate,
 })
 
 minetest.register_node("castle:gate_panel", {
 	drawtype = "nodebox",
 	description = S("Gate Door"),
-	groups = {choppy = 1},
+	groups = {choppy = 1, big_door = 1},
 	tiles = {
 		"default_wood.png^[transformR90",
 		"default_wood.png^[transformR90",
@@ -408,13 +539,14 @@ minetest.register_node("castle:gate_panel", {
 		fixed = {
 			{-0.5, -0.5, -0.5, 0.5, 0.5, -0.25},
 		}
-	}
+	},
+	on_rightclick = trigger_gate,
 })
 
 minetest.register_node("castle:gate_edge", {
 	drawtype = "nodebox",
 	description = S("Gate Door Edge"),
-	groups = {choppy = 1},
+	groups = {choppy = 1, big_door = 1},
 	tiles = {
 		"default_wood.png^[transformR90",
 		"default_wood.png^[transformR90",
@@ -430,16 +562,18 @@ minetest.register_node("castle:gate_edge", {
 		fixed = {
 			{-0.5, -0.5, -0.5, 0.5, 0.5, -0.25},
 		}
-	}
+	},
+	_gate_edges = {right=true},
+	on_rightclick = trigger_gate,
 })
 
 minetest.register_node("castle:gate_edge_handle", {
 	drawtype = "nodebox",
 	description = S("Gate Door With Handle"),
-	groups = {choppy = 1},
+	groups = {choppy = 1, big_door = 1},
 	tiles = {
-		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_door_side_mask.png)",
-		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_door_side_mask.png)",
+		"default_steel_block.png^(default_wood.png^[mask:castle_door_side_mask.png^[transformR90)",
+		"default_steel_block.png^(default_wood.png^[mask:castle_door_side_mask.png^[transformR90)",
 		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_door_side_mask.png)",
 		"default_steel_block.png^(default_wood.png^[transformR90^[mask:(castle_door_side_mask.png^[transformFX))",
 		"default_wood.png^[transformR90^(default_coal_block.png^[mask:castle_door_edge_mask.png^[transformFX)^(default_steel_block.png^[mask:castle_door_handle_mask.png^[transformFX)",
@@ -456,5 +590,7 @@ minetest.register_node("castle:gate_edge_handle", {
 			{4/16, -4/16, -9/16, 6/16, -3/16, -3/16},
 			{4/16, 4/16, -9/16, 6/16, 3/16, -3/16},
 		}
-	}
+	},
+	_gate_edges = {right=true},
+	on_rightclick = trigger_gate,
 })
