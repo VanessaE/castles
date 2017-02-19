@@ -340,18 +340,18 @@ minetest.register_node("castle:portcullis_bars_bottom", {
 minetest.register_craft({
 	output = "castle:portcullis_slot",
 	recipe = {
-		{"groups:wood","","groups:wood" },
+		{"group:wood","","group:wood" },
 		{"default:steel_ingot","","default:steel_ingot"},
-		{"groups:wood","","groups:wood" },
+		{"group:wood","","group:wood" },
 	},
 })
 	
 minetest.register_craft({
 	output = "castle:portcullis_bars",
 	recipe = {
-		{"groups:wood","default:steel_ingot","groups:wood" },
-		{"groups:wood","default:steel_ingot","groups:wood" },
-		{"groups:wood","default:steel_ingot","groups:wood" },
+		{"group:wood","default:steel_ingot","group:wood" },
+		{"group:wood","default:steel_ingot","group:wood" },
+		{"group:wood","default:steel_ingot","group:wood" },
 	},
 })
 
