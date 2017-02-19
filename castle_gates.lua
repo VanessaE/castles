@@ -258,11 +258,13 @@ castle_gates.trigger_gate = function(pos, node, player)
 	end	
 end
 
+-----------------------------------------------------------------------------------------------------------------------
+
 minetest.register_node("castle:portcullis_slot", {
 	drawtype = "nodebox",
 	description = S("Portcullis Slot"), 
 	--  top, bottom, right, left, back, front. 
-	tiles = {"default_wood.png", "default_stone_brick.png", "default_stone_brick.png", "default_stone_brick.png", "default_stone_brick.png", "default_stone_brick.png"},
+	tiles = {"default_stone_brick.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	groups = {oddly_breakable_by_hand=1},
@@ -270,21 +272,36 @@ minetest.register_node("castle:portcullis_slot", {
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.75}, -- body
-			{-0.5, -0.5, 1.25, 0.5, 0.5, 1.5}, -- far piece
-			{-0.25, -0.25, 1.15, 0.25, 0.25, 1.25}, -- gripper
-			{-0.25, -0.25, 0.75, 0.25, 0.25, 0.85}, -- gripper
-			
-			{-0.125, -0.5+1, -0.125, 0.125, -0.4375+1, 0.125}, -- axle
-			{-0.3125, -0.4375+1, -0.3125, 0.3125, -0.3125+1, 0.3125}, -- wheel
-			{-0.25, -0.3125+1, 0.125, -0.125, -0.1875+1, 0.25}, -- handle
-			{0.125, -0.3125+1, -0.25, 0.25, -0.1875+1, -0.125}, -- handle
+			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}, -- body
+			{-0.5, -0.5, -0.75, 0.5, 0.5, -1.5}, -- bracket
 		}
 	},
 	
 	collision_box = {
 		type = "fixed",
 		fixed = {-0.5, -0.5, -0.5, 0.5, 0.5, 1.5}, -- body
+	},
+})
+
+minetest.register_node("castle:portcullis_backer", {
+	drawtype = "nodebox",
+	description = S("Portcullis Backer"), 
+	--  top, bottom, right, left, back, front. 
+	tiles = {"default_stone_brick.png"},
+	paramtype = "light",
+	paramtype2 = "facedir",
+	groups = {oddly_breakable_by_hand=1},
+	
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -1.25, 0.5, 0.5, 0.5}, -- body
+		}
+	},
+	
+	collision_box = {
+		type = "fixed",
+		fixed = {-0.5, -0.5, -1.25, 0.5, 0.5, 0.5}, -- body
 	},
 })
 
@@ -305,11 +322,11 @@ minetest.register_node("castle:portcullis_bars", {
 	node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.125, -0.5, -0.125, 0.125, 0.5, 0.125}, -- middle bar
-			{-0.5, -0.5, -0.125, -0.375, 0.5, 0.125}, -- side bar
-			{0.375, -0.5, -0.125, 0.5, 0.5, 0.125}, -- side bar
-			{-0.375, 0.1875, -0.0625, 0.375, 0.3125, 0.0625}, -- crosspiece
-			{-0.375, -0.3125, -0.0625, 0.375, -0.1875, 0.0625}, -- crosspiece
+			{-0.125, -0.5, -0.5, 0.125, 0.5, -0.25}, -- middle bar
+			{-0.5, -0.5, -0.5, -0.375, 0.5, -0.25}, -- side bar
+			{0.375, -0.5, -0.5, 0.5, 0.5, -0.25}, -- side bar
+			{-0.375, 0.1875, -0.4375, 0.375, 0.3125, -0.3125}, -- crosspiece
+			{-0.375, -0.3125, -0.4375, 0.375, -0.1875, -0.3125}, -- crosspiece
 		}
 	},
 	on_rightclick = castle_gates.trigger_gate,
@@ -332,14 +349,14 @@ minetest.register_node("castle:portcullis_bars_bottom", {
 		node_box = {
 		type = "fixed",
 		fixed = {
-			{-0.125, -0.5, -0.125, 0.125, 0.5, 0.125}, -- middle bar
-			{-0.5, -0.5, -0.125, -0.375, 0.5, 0.125}, -- side bar
-			{0.375, -0.5, -0.125, 0.5, 0.5, 0.125}, -- side bar
-			{-0.375, 0.1875, -0.0625, 0.375, 0.3125, 0.0625}, -- crosspiece
-			{-0.375, -0.3125, -0.0625, 0.375, -0.1875, 0.0625}, -- crosspiece
-			{-0.0625, -0.5, -0.0625, 0.0625, -0.625, 0.0625}, -- peg
-			{0.4375, -0.5, -0.0625, 0.5, -0.625, 0.0625}, -- peg
-			{-0.5, -0.5, -0.0625, -0.4375, -0.625, 0.0625}, -- peg
+			{-0.125, -0.5, -0.5, 0.125, 0.5, -0.25}, -- middle bar
+			{-0.5, -0.5, -0.5, -0.375, 0.5, -0.25}, -- side bar
+			{0.375, -0.5, -0.5, 0.5, 0.5, -0.25}, -- side bar
+			{-0.375, 0.1875, -0.4375, 0.375, 0.3125, -0.3125}, -- crosspiece
+			{-0.375, -0.3125, -0.4375, 0.375, -0.1875, -0.3125}, -- crosspiece
+			{-0.0625, -0.5, -0.4375, 0.0625, -0.625, -0.3125}, -- peg
+			{0.4375, -0.5, -0.4375, 0.5, -0.625, -0.3125}, -- peg
+			{-0.5, -0.5, -0.4375, -0.4375, -0.625, -0.3125}, -- peg
 		}
 	},
 	_gate_edges = {bottom=true},
