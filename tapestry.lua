@@ -64,8 +64,9 @@ minetest.register_node("castle:tapestry", {
 		type = "wallmounted",
 		wall_side = {-0.5,-0.5,0.4375,0.5,1.5,0.5},
 	},
-	after_place_node = castle.fix_rotation_nsew,
-	after_dig_node = unifieddyes.after_dig_node
+	after_place_node = unifieddyes.fix_rotation_nsew,
+	after_dig_node = unifieddyes.after_dig_node,
+	on_rotate = unifieddyes.fix_after_screwdriver_nsew
 })
 
 -- Crafting from wool and a stick
@@ -93,8 +94,9 @@ minetest.register_node("castle:tapestry_long", {
 		type = "wallmounted",
 		wall_side = {-0.5,-0.5,0.4375,0.5,2.5,0.5},
 	},
-	after_place_node = castle.fix_rotation_nsew,
-	after_dig_node = unifieddyes.after_dig_node
+	after_place_node = unifieddyes.fix_rotation_nsew,
+	after_dig_node = unifieddyes.after_dig_node,
+	on_rotate = unifieddyes.fix_after_screwdriver_nsew
 })
 
 -- Crafting from normal tapestry and wool
@@ -122,8 +124,9 @@ minetest.register_node("castle:tapestry_very_long", {
 		type = "wallmounted",
 		wall_side = {-0.5,-0.5,0.4375,0.5,3.5,0.5},
 	},
-	after_place_node = castle.fix_rotation_nsew,
-	after_dig_node = unifieddyes.after_dig_node
+	after_place_node = unifieddyes.fix_rotation_nsew,
+	after_dig_node = unifieddyes.after_dig_node,
+	on_rotate = unifieddyes.fix_after_screwdriver_nsew
 })
 
 -- Crafting from long tapestry and wool
