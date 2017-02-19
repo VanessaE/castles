@@ -2,34 +2,36 @@
 local MP = minetest.get_modpath(minetest.get_current_modname())
 local S, NS = dofile(MP.."/intllib.lua")
 
-doors.register("castle:oak_door", {
-	tiles = {{ name = "castle_door_oak.png", backface_culling = true }},
-	description = S("Oak Door"),
-	inventory_image = "castle_oak_door_inv.png",
-	protected = true,
-	groups = { choppy = 2, door = 1 },
-	sounds = default.node_sound_wood_defaults(),
-	recipe = {
-		{"default:tree", "default:tree"},
-		{"default:tree", "default:tree"},
-		{"default:tree", "default:tree"},
-	}
-})
-
-doors.register("castle:jail_door", {
-	tiles = {{ name = "castle_door_jail.png", backface_culling = true }},
-	description = S("Jail Door"),
-	inventory_image = "castle_jail_door_inv.png",
-	protected = true,
-	groups = { cracky = 2, door = 1},
-	sound_open = "doors_steel_door_open",
-	sound_close = "doors_steel_door_close",
-	recipe = {
-		{"castle:jailbars", "castle:jailbars"},
-		{"castle:jailbars", "castle:jailbars"},
-		{"castle:jailbars", "castle:jailbars"},
-	}
-})
+if minetest.get_modpath("doors") then
+	doors.register("castle:oak_door", {
+		tiles = {{ name = "castle_door_oak.png", backface_culling = true }},
+		description = S("Oak Door"),
+		inventory_image = "castle_oak_door_inv.png",
+		protected = true,
+		groups = { choppy = 2, door = 1 },
+		sounds = default.node_sound_wood_defaults(),
+		recipe = {
+			{"default:tree", "default:tree"},
+			{"default:tree", "default:tree"},
+			{"default:tree", "default:tree"},
+		}
+	})
+	
+	doors.register("castle:jail_door", {
+		tiles = {{ name = "castle_door_jail.png", backface_culling = true }},
+		description = S("Jail Door"),
+		inventory_image = "castle_jail_door_inv.png",
+		protected = true,
+		groups = { cracky = 2, door = 1, flow_through = 1},
+		sound_open = "doors_steel_door_open",
+		sound_close = "doors_steel_door_close",
+		recipe = {
+			{"castle:jailbars", "castle:jailbars"},
+			{"castle:jailbars", "castle:jailbars"},
+			{"castle:jailbars", "castle:jailbars"},
+		}
+	})
+end
 
 if minetest.get_modpath("xpanes") then
 	xpanes.register_pane("jailbars", {
@@ -41,7 +43,7 @@ if minetest.get_modpath("xpanes") then
 		inventory_image = "castle_jailbars.png",
 		wield_image = "castle_jailbars.png",
 		sounds = default.node_sound_stone_defaults(),
-		groups = {cracky=1, pane=1},
+		groups = {cracky=1, pane=1, flow_through=1},
 		recipe = {
 			{"default:steel_ingot", "default:steel_ingot", "default:steel_ingot"},
 			{"default:steel_ingot", "",                    "default:steel_ingot"},
@@ -283,8 +285,15 @@ minetest.register_node("castle:portcullis_slot", {
 minetest.register_node("castle:portcullis_bars", {
 	drawtype = "nodebox",
 	description = S("Portcullis Bars"),
-	groups = {portcullis = 1, oddly_breakable_by_hand=1},
-	tiles = {"default_steel_block.png"},
+	groups = {portcullis = 1, choppy = 1, flow_through = 1},
+	tiles = {
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90",
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
+		},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	node_box = {
@@ -299,11 +308,18 @@ minetest.register_node("castle:portcullis_bars", {
 	}
 })
 
-minetest.register_node("castle:portcullis_bar_bottom", {
+minetest.register_node("castle:portcullis_bars_bottom", {
 	drawtype = "nodebox",
 	description = S("Portcullis Bottom"),
-	groups = {portcullis_edge = 1, oddly_breakable_by_hand=1},
-	tiles = {"default_steel_block.png"},
+	groups = {portcullis_edge = 1, choppy = 1, flow_through = 1},
+	tiles = {
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
+		"default_wood.png^[transformR90",
+		"default_wood.png^[transformR90",
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
+		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
+		},
 	paramtype = "light",
 	paramtype2 = "facedir",
 		node_box = {
@@ -319,4 +335,36 @@ minetest.register_node("castle:portcullis_bar_bottom", {
 			{-0.5, -0.5, -0.0625, -0.4375, -0.625, 0.0625}, -- peg
 		}
 	}
+})
+
+minetest.register_craft({
+	output = "castle:portcullis_slot",
+	recipe = {
+		{"groups:wood","","groups:wood" },
+		{"default:steel_ingot","","default:steel_ingot"},
+		{"groups:wood","","groups:wood" },
+	},
+})
+	
+minetest.register_craft({
+	output = "castle:portcullis_bars",
+	recipe = {
+		{"groups:wood","default:steel_ingot","groups:wood" },
+		{"groups:wood","default:steel_ingot","groups:wood" },
+		{"groups:wood","default:steel_ingot","groups:wood" },
+	},
+})
+
+minetest.register_craft({
+	output = "castle:portcullis_bars",
+	recipe = {
+		{"castle:portcullis_bars_bottom"}
+	},
+})
+
+minetest.register_craft({
+	output = "castle:portcullis_bars_bottom",
+	recipe = {
+		{"castle:portcullis_bars"}
+	},
 })
