@@ -58,6 +58,9 @@ for i = 1, 15 do
 end
 minetest.register_alias("castle:jailbars", "xpanes:jailbars")
 
+---------------------------------------------------------------------------------------------------------------------
+-- Big door methods
+
 -- Given a facedir, returns a set of all the corresponding directions
 local get_dirs = function(facedir)
 	local dirs = {}
@@ -467,6 +470,8 @@ for _, material in pairs(castle_structure.materials) do
 	
 end
 
+----------------------------------------------------------------------------------------------------
+
 minetest.register_node("castle:portcullis_bars", {
 	drawtype = "nodebox",
 	description = S("Portcullis Bars"),
@@ -528,7 +533,7 @@ minetest.register_node("castle:portcullis_bars_bottom", {
 })
 
 minetest.register_craft({
-	output = "castle:portcullis_bars",
+	output = "castle:portcullis_bars 3",
 	recipe = {
 		{"group:wood","default:steel_ingot","group:wood" },
 		{"group:wood","default:steel_ingot","group:wood" },
@@ -551,6 +556,14 @@ minetest.register_craft({
 })
 
 --------------------------------------------------------------------------------------------------------------
+
+minetest.register_craft({
+	output = "castle:gate_panel 8",
+	recipe = {
+		{"stairs:slab_wood","stairs:slab_wood", ""},
+		{"stairs:slab_wood","stairs:slab_wood", ""},
+	},
+})
 
 minetest.register_node("castle:gate_panel", {
 	drawtype = "nodebox",
@@ -576,6 +589,12 @@ minetest.register_node("castle:gate_panel", {
 	on_rightclick = castle_gates.trigger_gate,
 })
 
+minetest.register_craft({
+	output = "castle:gate_edge",
+	type = "shapeless",
+	recipe = {"castle:gate_panel"},
+})
+
 minetest.register_node("castle:gate_edge", {
 	drawtype = "nodebox",
 	description = S("Gate Door Edge"),
@@ -599,6 +618,18 @@ minetest.register_node("castle:gate_edge", {
 	},
 	_gate_edges = {right=true},
 	on_rightclick = castle_gates.trigger_gate,
+})
+
+minetest.register_craft({
+	output = "castle:gate_edge_handle",
+	type = "shapeless",
+	recipe = {"castle:gate_edge"},
+})
+
+minetest.register_craft({
+	output = "castle:gate_panel",
+	type = "shapeless",
+	recipe = {"castle:gate_edge_handle"},
 })
 
 minetest.register_node("castle:gate_edge_handle", {
@@ -632,6 +663,15 @@ minetest.register_node("castle:gate_edge_handle", {
 
 
 ------------------------------------------------------------------------------
+
+minetest.register_craft({
+	output = "castle:gate_hinge 3",
+	recipe = {
+		{"", "castle:gate_panel", ""},
+		{"default:steel_ingot", "castle:gate_panel", ""},
+		{"", "castle:gate_panel", ""}
+	},
+})
 
 minetest.register_node("castle:gate_hinge", {
 	drawtype = "nodebox",
