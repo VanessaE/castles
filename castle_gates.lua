@@ -44,7 +44,7 @@ if minetest.get_modpath("xpanes") then
 		textures = {"castle_jailbars.png", "castle_jailbars.png", "xpanes_space.png"},
 		inventory_image = "castle_jailbars.png",
 		wield_image = "castle_jailbars.png",
-		sounds = default.node_sound_stone_defaults(),
+		sounds = default.node_sound_metal_defaults(),
 		groups = {cracky=1, pane=1, flow_through=1},
 		recipe = {
 			{"default:steel_ingot", "default:steel_ingot", "default:steel_ingot"},
@@ -409,7 +409,7 @@ for _, material in pairs(castle_structure.materials) do
 		},
 	})
 	
-	minetest.register_node("castle:"..material.name.."portcullis_slot_reverse", {
+	minetest.register_node("castle:"..material.name.."_portcullis_slot_reverse", {
 		drawtype = "nodebox",
 		description = S("@1 Portcullis Slot Reverse", desc), 
 		tiles = tile,
@@ -430,6 +430,41 @@ for _, material in pairs(castle_structure.materials) do
 			fixed = {-0.5, -0.5, -1.25, 0.5, 0.5, 0.5}, -- body
 		},
 	})
+	
+	
+	minetest.register_craft({
+	output = "castle:"..material.name.."_portcullis_slot 3",
+	recipe = {
+		{material.craft_material,"",material.craft_material},
+		{material.craft_material,"",material.craft_material},
+		{material.craft_material,"",material.craft_material},
+		},
+	})
+	
+	minetest.register_craft({
+		output = "castle:"..material.name.."_portcullis_slot",
+		type = "shapeless",
+		recipe = {"castle:"..material.name.."_portcullis_slot_reverse"},
+	})
+	minetest.register_craft({
+		output = "castle:"..material.name.."_portcullis_slot_reverse",
+		type = "shapeless",
+		recipe = {"castle:"..material.name.."_portcullis_slot"},
+	})
+	
+	if burn_time > 0 then
+		minetest.register_craft({
+			type = "fuel",
+			recipe = "castle:"..material.name.."_portcullis_slot",
+			burntime = burn_time * 2,
+		})
+		minetest.register_craft({
+			type = "fuel",
+			recipe = "castle:"..material.name.."_portcullis_slot_reverse",
+			burntime = burn_time * 2,
+		})	
+	end
+	
 end
 
 minetest.register_node("castle:portcullis_bars", {
@@ -444,6 +479,7 @@ minetest.register_node("castle:portcullis_bars", {
 		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
 		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
 		},
+	sounds = default.node_sound_wood_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	node_box = {
@@ -471,6 +507,7 @@ minetest.register_node("castle:portcullis_bars_bottom", {
 		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
 		"default_steel_block.png^(default_wood.png^[transformR90^[mask:castle_portcullis_mask.png)",
 		},
+	sounds = default.node_sound_wood_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 		node_box = {
@@ -490,15 +527,6 @@ minetest.register_node("castle:portcullis_bars_bottom", {
 	on_rightclick = castle_gates.trigger_gate,
 })
 
-minetest.register_craft({
-	output = "castle:portcullis_slot",
-	recipe = {
-		{"group:wood","","group:wood" },
-		{"default:steel_ingot","","default:steel_ingot"},
-		{"group:wood","","group:wood" },
-	},
-})
-	
 minetest.register_craft({
 	output = "castle:portcullis_bars",
 	recipe = {
@@ -536,6 +564,7 @@ minetest.register_node("castle:gate_panel", {
 		"default_wood.png^[transformR90",
 		"default_wood.png^[transformR90",
 		},
+	sounds = default.node_sound_wood_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 		node_box = {
@@ -559,6 +588,7 @@ minetest.register_node("castle:gate_edge", {
 		"default_wood.png^[transformR90^(default_coal_block.png^[mask:castle_door_edge_mask.png^[transformFX)",
 		"default_wood.png^[transformR90^(default_coal_block.png^[mask:castle_door_edge_mask.png)",
 		},
+	sounds = default.node_sound_wood_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 		node_box = {
@@ -583,6 +613,7 @@ minetest.register_node("castle:gate_edge_handle", {
 		"default_wood.png^[transformR90^(default_coal_block.png^[mask:castle_door_edge_mask.png^[transformFX)^(default_steel_block.png^[mask:castle_door_handle_mask.png^[transformFX)",
 		"default_wood.png^[transformR90^(default_coal_block.png^[mask:castle_door_edge_mask.png)^(default_steel_block.png^[mask:castle_door_handle_mask.png)",
 		},
+	sounds = default.node_sound_wood_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 		node_box = {
@@ -609,6 +640,7 @@ minetest.register_node("castle:gate_hinge", {
 	tiles = {
 		"default_wood.png^[transformR90",
 		},
+	sounds = default.node_sound_wood_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	
