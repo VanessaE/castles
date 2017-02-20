@@ -26,43 +26,43 @@ end
 --	composition_material=, -- Optional, this will override the properties of the product with a specific material if you want to use a group for the craft material
 --}
 
-local materials = {}
+castle_structure.materials = {}
 if read_setting("castle_structure_stonewall", true) then
-	table.insert(materials, {name="stonewall", desc=S("Stonewall"), tile="castle_stonewall.png", craft_material="castle:stonewall"})
+	table.insert(castle_structure.materials, {name="stonewall", desc=S("Stonewall"), tile="castle_stonewall.png", craft_material="castle:stonewall"})
 end
 if read_setting("castle_structure_cobble", true) then
-	table.insert(materials, {name="cobble", desc=S("Cobble"), tile="default_cobble.png", craft_material="default:cobble"})
+	table.insert(castle_structure.materials, {name="cobble", desc=S("Cobble"), tile="default_cobble.png", craft_material="default:cobble"})
 end
 if read_setting("castle_structure_stonebrick", true) then
-	table.insert(materials, {name="stonebrick", desc=S("Stonebrick"), tile="default_stone_brick.png", craft_material="default:stonebrick"})
+	table.insert(castle_structure.materials, {name="stonebrick", desc=S("Stonebrick"), tile="default_stone_brick.png", craft_material="default:stonebrick"})
 end
 if read_setting("castle_structure_sandstonebrick", true) then
-	table.insert(materials, {name="sandstonebrick", desc=S("Sandstone Brick"), tile="default_sandstone_brick.png", craft_material="default:sandstonebrick"})
+	table.insert(castle_structure.materials, {name="sandstonebrick", desc=S("Sandstone Brick"), tile="default_sandstone_brick.png", craft_material="default:sandstonebrick"})
 end
 if read_setting("castle_structure_desertstonebrick", true) then
-	table.insert(materials, {name="desertstonebrick", desc=S("Desert Stone Brick"), tile="default_desert_stone_brick.png", craft_material="default:desert_stonebrick"})
+	table.insert(castle_structure.materials, {name="desertstonebrick", desc=S("Desert Stone Brick"), tile="default_desert_stone_brick.png", craft_material="default:desert_stonebrick"})
 end
 if read_setting("castle_structure_stone", true) then
-	table.insert(materials, {name="stone", desc=S("Stone"), tile="default_stone.png", craft_material="default:stone"})
+	table.insert(castle_structure.materials, {name="stone", desc=S("Stone"), tile="default_stone.png", craft_material="default:stone"})
 end
 if read_setting("castle_structure_sandstone", true) then
-	table.insert(materials, {name="sandstone", desc=S("Sandstone"), tile="default_sandstone.png", craft_material="default:sandstone"})
+	table.insert(castle_structure.materials, {name="sandstone", desc=S("Sandstone"), tile="default_sandstone.png", craft_material="default:sandstone"})
 end
 if read_setting("castle_structure_desertstone", true) then
-	table.insert(materials, {name="desertstone", desc=S("Desert Stone"), tile="default_desert_stone.png", craft_material="default:desert_stone"})
+	table.insert(castle_structure.materials, {name="desertstone", desc=S("Desert Stone"), tile="default_desert_stone.png", craft_material="default:desert_stone"})
 end
 if read_setting("castle_structure_wood", false) then
-	table.insert(materials, {name="wood", desc=S("Wood"), tile="default_wood.png", craft_material="group:wood", composition_material="default:wood"})
+	table.insert(castle_structure.materials, {name="wood", desc=S("Wood"), tile="default_wood.png", craft_material="group:wood", composition_material="default:wood"})
 end
 if read_setting("castle_structure_ice", false) then
-	table.insert(materials, {name="ice", desc=S("Ice"), tile="default_ice.png", craft_material="default:ice"})
+	table.insert(castle_structure.materials, {name="ice", desc=S("Ice"), tile="default_ice.png", craft_material="default:ice"})
 end
 if read_setting("castle_structure_snow", false) then
-	table.insert(materials, {name="snow", desc=S("Snow"), tile="default_snow.png", craft_material="default:snow"})
+	table.insert(castle_structure.materials, {name="snow", desc=S("Snow"), tile="default_snow.png", craft_material="default:snow"})
 end
 
 
-local get_material_properties = function(material)
+castle_structure.get_material_properties = function(material)
 	local composition_def
 	local burn_time
 	if material.composition_material ~= nil then
@@ -91,7 +91,7 @@ end
 -------------------------------------------------------------------------------------
 
 castle_structure.register_murderhole = function(material)
-	local composition_def, burn_time, tile, desc = get_material_properties(material)
+	local composition_def, burn_time, tile, desc = castle_structure.get_material_properties(material)
 	local mod_name = minetest.get_current_modname()
 	
 	-- Node Definition
@@ -169,7 +169,7 @@ end
 -------------------------------------------------------------------------------------
 
 castle_structure.register_pillar = function(material)
-	local composition_def, burn_time, tile, desc = get_material_properties(material)
+	local composition_def, burn_time, tile, desc = castle_structure.get_material_properties(material)
 	local crossbrace_connectable_groups = {}
 	for group, val in pairs(composition_def.groups) do
 		crossbrace_connectable_groups[group] = val
@@ -412,7 +412,7 @@ end
 -------------------------------------------------------------------------------------
 
 castle_structure.register_arrowslit = function(material)
-	local composition_def, burn_time, tile, desc = get_material_properties(material)
+	local composition_def, burn_time, tile, desc = castle_structure.get_material_properties(material)
 	local mod_name = minetest.get_current_modname()
 
 	-- Node Definition
@@ -602,19 +602,19 @@ end
 -------------------------------------------------------------------------------------
 
 if read_setting("castle_structure_pillar", true) then
-	for _, material in pairs(materials) do
+	for _, material in pairs(castle_structure.materials) do
 		castle_structure.register_pillar(material)
 	end
 end
 
 if read_setting("castle_structure_arrowslit", true) then
-	for _, material in pairs(materials) do
+	for _, material in pairs(castle_structure.materials) do
 		castle_structure.register_arrowslit(material)
 	end
 end
 
 if read_setting("castle_structure_murderhole", true) then
-	for _, material in pairs(materials) do
+	for _, material in pairs(castle_structure.materials) do
 		castle_structure.register_murderhole(material)
 	end
 end

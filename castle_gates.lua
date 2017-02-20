@@ -383,50 +383,54 @@ end
 
 -----------------------------------------------------------------------------------------------------------------------
 
-minetest.register_node("castle:portcullis_slot", {
-	drawtype = "nodebox",
-	description = S("Portcullis Slot"), 
-	--  top, bottom, right, left, back, front. 
-	tiles = {"default_stone_brick.png"},
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=1},
-	
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}, -- body
-			{-0.5, -0.5, -0.75, 0.5, 0.5, -1.5}, -- bracket
-		}
-	},
-	
-	collision_box = {
-		type = "fixed",
-		fixed = {-0.5, -0.5, -0.5, 0.5, 0.5, 1.5}, -- body
-	},
-})
+for _, material in pairs(castle_structure.materials) do
+	local composition_def, burn_time, tile, desc = castle_structure.get_material_properties(material)
 
-minetest.register_node("castle:portcullis_slot_reverse", {
-	drawtype = "nodebox",
-	description = S("Portcullis Slot Reverse"), 
-	--  top, bottom, right, left, back, front. 
-	tiles = {"default_stone_brick.png"},
-	paramtype = "light",
-	paramtype2 = "facedir",
-	groups = {oddly_breakable_by_hand=1},
+	minetest.register_node("castle:"..material.name.."_portcullis_slot", {
+		drawtype = "nodebox",
+		description = S("@1 Portcullis Slot", desc),
+		tiles = tile,
+		paramtype = "light",
+		paramtype2 = "facedir",
+		groups = composition_def.groups,
+		sounds = composition_def.sounds,
+		
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}, -- body
+				{-0.5, -0.5, -0.75, 0.5, 0.5, -1.5}, -- bracket
+			}
+		},
+		
+		collision_box = {
+			type = "fixed",
+			fixed = {-0.5, -0.5, -0.5, 0.5, 0.5, 1.5}, -- body
+		},
+	})
 	
-	node_box = {
-		type = "fixed",
-		fixed = {
-			{-0.5, -0.5, -1.25, 0.5, 0.5, 0.5}, -- body
-		}
-	},
-	
-	collision_box = {
-		type = "fixed",
-		fixed = {-0.5, -0.5, -1.25, 0.5, 0.5, 0.5}, -- body
-	},
-})
+	minetest.register_node("castle:"..material.name.."portcullis_slot_reverse", {
+		drawtype = "nodebox",
+		description = S("@1 Portcullis Slot Reverse", desc), 
+		tiles = tile,
+		paramtype = "light",
+		paramtype2 = "facedir",
+		groups = composition_def.groups,
+		sounds = composition_def.sounds,
+		
+		node_box = {
+			type = "fixed",
+			fixed = {
+				{-0.5, -0.5, -1.25, 0.5, 0.5, 0.5}, -- body
+			}
+		},
+		
+		collision_box = {
+			type = "fixed",
+			fixed = {-0.5, -0.5, -1.25, 0.5, 0.5, 0.5}, -- body
+		},
+	})
+end
 
 minetest.register_node("castle:portcullis_bars", {
 	drawtype = "nodebox",
@@ -607,13 +611,19 @@ minetest.register_node("castle:gate_hinge", {
 		},
 	paramtype = "light",
 	paramtype2 = "facedir",
-		node_box = {
+	
+	node_box = {
 		type = "fixed",
 		fixed = {
 			{-0.5, -0.5, -0.5, 0.5, 0.5, -0.25},
 			{-10/16, -4/16, -10/16, -6/16, 4/16, -6/16},
 		}
 	},
+	collision_box = {
+		type = "fixed",
+		fixed = {-0.5, -0.5, -0.5, 0.5, 0.5, -0.25},
+	},
+	
 	_gate_hinge = {axis="top", offset={"front","left"}},
 	on_rightclick = castle_gates.trigger_gate,
 })
