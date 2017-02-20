@@ -15,27 +15,6 @@ dofile(minetest.get_modpath("castle").."/crate.lua")
 
 dofile(minetest.get_modpath("castle").."/workbench.lua")
 
-dofile(minetest.get_modpath("castle").."/castle_stonewall.lua")
-dofile(minetest.get_modpath("castle").."/castle_structure.lua")
-
-dofile(minetest.get_modpath("castle").."/castle_gates.lua")
-
-
-minetest.register_node("castle:roofslate", {
-	drawtype = "raillike",
-	description = "Roof Slates",
-	inventory_image = "castle_slate.png",
-	paramtype = "light",
-	walkable = false,
-	tiles = {'castle_slate.png'},
-	climbable = true,
-	selection_box = {
-		type = "fixed",
-		fixed = {-1/2, -1/2, -1/2, 1/2, -1/2+1/16, 1/2},
-	},
-	groups = {cracky=3,attached_node=1},
-	sounds = default.node_sound_glass_defaults(),
-})
 
 minetest.register_node("castle:hides", {
 	drawtype = "signlike",
@@ -62,51 +41,4 @@ minetest.register_craft( {
 	}
 })
 
-local mod_building_blocks = minetest.get_modpath("building_blocks")
-local mod_streets = minetest.get_modpath("streets") or minetest.get_modpath("asphalt")
-
-if mod_building_blocks then
-	minetest.register_craft({
-		output = "castle:roofslate 4",
-		recipe = {
-			{ "building_blocks:Tar" , "default:gravel" },
-			{ "default:gravel",       "building_blocks:Tar" }
-		}
-	})
-
-	minetest.register_craft( {
-		output = "castle:roofslate 4",
-		recipe = {
-			{ "default:gravel",       "building_blocks:Tar" },
-			{ "building_blocks:Tar" , "default:gravel" }
-		}
-	})
-end
-
-if mod_streets then
-	minetest.register_craft( {
-		output = "castle:roofslate 4",
-		recipe = {
-			{ "streets:asphalt" , "default:gravel" },
-			{ "default:gravel",   "streets:asphalt" }
-		}
-	})
-
-	minetest.register_craft( {
-		output = "castle:roofslate 4",
-		recipe = {
-			{ "default:gravel",   "streets:asphalt" },
-			{ "streets:asphalt" , "default:gravel" }
-		}
-	})
-end
-
-if not (mod_building_blocks or mod_streets) then
-	minetest.register_craft({
-		type = "cooking",
-		output = "castle:roofslate",
-		recipe = "default:gravel",
-	})
-
-end
 
