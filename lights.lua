@@ -1,3 +1,4 @@
+minetest.register_alias("darkage:lamp",        "castle:street_light")
 
 minetest.register_node("castle:light",{
 	drawtype = "glasslike",
