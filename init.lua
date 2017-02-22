@@ -7,7 +7,6 @@ dofile(minetest.get_modpath("castle").."/lights.lua")
 
 dofile(minetest.get_modpath("castle").."/town_item.lua")
 dofile(minetest.get_modpath("castle").."/orbs.lua")
-dofile(minetest.get_modpath("castle").."/rope.lua")
 
 dofile(minetest.get_modpath("castle").."/crossbow.lua")
 dofile(minetest.get_modpath("castle").."/battleaxe.lua")
