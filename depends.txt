@@ -1,13 +1,6 @@
 default
-stairs
-doors
 farming
 unifieddyes
-building_blocks?
-asphalt?
-streets?
-moreblocks?
-xpanes?
 intllib?
 hopper?
 loot?
