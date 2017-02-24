@@ -47,3 +47,12 @@ minetest.register_craft({
 		{"default:wood", "default:steel_ingot", "default:wood"},
 	}
 })
+
+-- Hopper compatibility
+if minetest.get_modpath("hopper") and hopper ~= nil and hopper.add_container ~= nil then
+	hopper:add_container({
+		{"top", "castle:crate", "main"},
+		{"side", "castle:crate", "main"},
+		{"bottom", "castle:crate", "main"},
+	})
+end
