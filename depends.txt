@@ -10,3 +10,4 @@ moreblocks?
 xpanes?
 intllib?
 hopper?
+loot?

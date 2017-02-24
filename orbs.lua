@@ -100,3 +100,42 @@ minetest.register_craft({
    {"castle:orb_day"},
   },
 })
+
+if minetest.get_modpath("loot") then
+	loot.register_loot({
+		weights = { generic = 10, valuable= 10 },
+		payload = {
+			stack = ItemStack("castle:orb_day"),
+			min_size = 1,
+			max_size = 1,
+		},
+	})
+
+	loot.register_loot({
+		weights = { generic = 10, valuable= 10 },
+		payload = {
+			stack = ItemStack("castle:orb_night"),
+			min_size = 1,
+			max_size = 1,
+		},
+	})
+
+	loot.register_loot({
+		weights = { generic = 10, valuable= 10 },
+		payload = {
+			stack = ItemStack("castle:orb_dawn"),
+			min_size = 1,
+			max_size = 1,
+		},
+	})
+
+	loot.register_loot({
+		weights = { generic = 10, valuable= 10 },
+		payload = {
+			stack = ItemStack("castle:orb_dusk"),
+			min_size = 1,
+			max_size = 1,
+		},
+	})
+
+end
