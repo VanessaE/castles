@@ -1,6 +1,5 @@
 castle = {}
 
-dofile(minetest.get_modpath("castle").."/tapestry.lua")
 dofile(minetest.get_modpath("castle").."/shields_decor.lua")
 dofile(minetest.get_modpath("castle").."/hides.lua")
 dofile(minetest.get_modpath("castle").."/lights.lua")

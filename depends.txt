@@ -1,6 +1,5 @@
 default
 farming
-unifieddyes
 intllib?
 hopper?
 loot?
